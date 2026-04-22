@@ -1,0 +1,80 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background-color: #fff !important;
+}
+
+/* ========================================
+   自定義 Bootstrap 主題色 - Purple
+   ======================================== */
+
+/* Purple 主題色 */
+.bg-purple {
+  background-color: #7030a0 !important;
+}
+
+.bs-purple {
+  color: #7030a0 !important;
+}
+
+.text-purple {
+  color: #7030a0 !important;
+}
+
+.btn-purple {
+  color: #fff;
+  background-color: #7030a0;
+  border-color: #7030a0;
+}
+
+.btn-purple:hover {
+  color: #fff;
+  background-color: #5a2580;
+  border-color: #5a2580;
+}
+
+.btn-purple:focus,
+.btn-purple.focus {
+  color: #fff;
+  background-color: #5a2580;
+  border-color: #5a2580;
+  box-shadow: 0 0 0 0.2rem rgba(112, 48, 160, 0.5);
+}
+
+.btn-outline-purple {
+  color: #7030a0;
+  border-color: #7030a0;
+}
+
+.btn-outline-purple:hover {
+  color: #fff;
+  background-color: #7030a0;
+  border-color: #7030a0;
+}
+
+.badge.bg-purple {
+  background-color: #7030a0 !important;
+}
+
+.border-purple {
+  border-color: #7030a0 !important;
+}
+
+.alert-purple {
+  color: #3d1856;
+  background-color: #e8dbf3;
+  border-color: #dcc9ea;
+}
+
+.table-purple {
+  background-color: #f3eaf8;
+}
+
+.table-purple th,
+.table-purple td,
+.table-purple thead th,
+.table-purple tbody + tbody {
+  border-color: #dcc9ea;
+}
+
