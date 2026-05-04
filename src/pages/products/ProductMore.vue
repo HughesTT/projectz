@@ -260,7 +260,7 @@ const scrollToTop = () => {
   // 多重備份機制確保行動裝置也能滾動
   // 方法1: 原始語法（最可靠）
   window.scrollTo(0, 0)
-  
+
   // 方法2: 同時滾動 document 元素（某些行動瀏覽器需要）
   if (document.documentElement) {
     document.documentElement.scrollTop = 0
@@ -275,16 +275,16 @@ watch(() => route.params.productId, async (newId, oldId) => {
   if (newId) {
     // 立即滾動
     scrollToTop()
-    
+
     // 延遲備份滾動（等待 router 處理完成）
     setTimeout(() => {
       scrollToTop()
     }, 0)
-    
+
     // 載入資料後再次確保位置
     await nextTick()
     await loadProduct()
-    
+
     // 最後再次滾動確保（針對資料載入後的佈局變化）
     setTimeout(() => {
       scrollToTop()
@@ -294,12 +294,12 @@ watch(() => route.params.productId, async (newId, oldId) => {
 
 onMounted(async () => {
   getFavorite()
-  
+
   // 首次載入時也確保滾動到頂部
   scrollToTop()
-  
+
   await loadProduct()
-  
+
   // 載入完成後再次確保位置
   setTimeout(() => {
     scrollToTop()
