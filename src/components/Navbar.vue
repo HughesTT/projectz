@@ -120,9 +120,9 @@ const { showToast } = useToast()
 
 // 產品分類
 const productCategories = ref([
-  { name: 'Headphone', link: '/products/headphone', icon: 'bi bi-headphones' },
-  { name: 'Speaker', link: '/products/speaker', icon: 'bi bi-speaker' },
-  { name: 'TV', link: '/products/tv', icon: 'bi bi-tv' },
+  { name: '耳機', link: '/products/headphone', icon: 'bi bi-headphones' },
+  { name: '揚聲器', link: '/products/speaker', icon: 'bi bi-speaker' },
+  { name: '電視', link: '/products/tv', icon: 'bi bi-tv' },
 ])
 
 // 搜尋功能
@@ -149,7 +149,7 @@ const handleSearchBlur = () => {
 
 const handleSearch = () => {
   if (searchQuery.value.trim()) {
-    router.push({ path: '/products', query: { search: searchQuery.value } })
+    router.push({ path: '/result', query: { search: searchQuery.value } })
     isSearchActive.value = false
   }
 }

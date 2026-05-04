@@ -86,34 +86,27 @@ export const useOrderStore = defineStore('orderStore', () => {
       const apiBase = import.meta.env.VITE_APP_API
       const apiPath = import.meta.env.VITE_APP_PATH
       
-      // 如果沒有設定環境變數，使用本地模擬
       if (!apiBase || !apiPath) {
-        console.log('環境變數未設定，使用本地模擬訂單')
-        return { success: true, message: '訂單已建立（本地模式）', orderId: `ORD${Date.now()}`, localOnly: true }
+        throw new Error('環境變數未設定')
       }
 
       const api = `${apiBase}api/${apiPath}/order`
 
       const res = await fetch(api, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: orderData })
       })
       
       const data = await res.json()
 
       if (data.success) {
-        console.log('訂單已成功送至後端，訂單編號:', data.orderId)
         return { success: true, message: '訂單建立成功', orderId: data.orderId }
       } else {
         throw new Error(data.message || '訂單建立失敗')
       }
     } catch (error) {
-      console.warn('後端 API 調用失敗，使用本地模式:', error.message)
-      // 即使後端失敗，仍返回成功讓前端可以繼續運作
-      return { success: true, message: '訂單已建立（本地模式）', orderId: `ORD${Date.now()}`, localOnly: true }
+      return { success: false, message: error.message }
     } finally {
       status.isLoading = false
     }
@@ -142,7 +135,7 @@ export const useOrderStore = defineStore('orderStore', () => {
           'Content-Type': 'application/json',
           'Authorization': token,
         },
-        body: JSON.stringify({ data: orders })
+        body: JSON.stringify({ data: paid })
       })
 
       const data = await res.json()

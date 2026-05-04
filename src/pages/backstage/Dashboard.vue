@@ -1,7 +1,4 @@
 <template>
-  <!-- 自訂 Loading 元件 -->
-  <!-- <LoadingOverlay :active="isLoading" :is-full-page="true" loader="dots" color="#7030a0" message="載入中..." /> -->
-
   <div class="dashboard-layout">
     <!-- 側邊導覽（固定位置） -->
     <Navbar />

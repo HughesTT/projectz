@@ -58,7 +58,6 @@ export const useCouponStore = defineStore('couponStore',
           coupons.value = data.coupons || []
           pages.value = data.pagination || {}
           currentPage.value = page
-          console.log('優惠券:',coupons.value)
         } else {
           // 驗證失敗
           if (data.message.includes('驗證錯誤') || data.message.includes('登入')) {

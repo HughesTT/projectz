@@ -26,10 +26,36 @@
 
       <div class="menu-section">
         <div class="section-title">管理功能</div>
-        <router-link to="/dashboard/products" class="nav-link">
-          <i class="bi bi-box-seam"></i>
-          <span>商品管理</span>
-        </router-link>
+
+        <!-- 商品管理 - 可展開 -->
+        <div class="nav-group">
+          <div class="nav-link nav-group-header" @click="toggleProductsMenu">
+            <i class="bi bi-box-seam"></i>
+            <span>商品管理</span>
+            <i class="bi toggle-icon" :class="isProductsMenuOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </div>
+          <transition name="slide-fade">
+            <div v-show="isProductsMenuOpen" class="nav-submenu">
+              <router-link to="/dashboard/products" class="nav-sublink">
+                <i class="bi bi-circle-fill"></i>
+                <span>全部商品</span>
+              </router-link>
+              <router-link to="/dashboard/products/headphone" class="nav-sublink">
+                <i class="bi bi-headphones"></i>
+                <span>耳機</span>
+              </router-link>
+              <router-link to="/dashboard/products/speaker" class="nav-sublink">
+                <i class="bi bi-speaker"></i>
+                <span>喇叭</span>
+              </router-link>
+              <router-link to="/dashboard/products/tv" class="nav-sublink">
+                <i class="bi bi-tv"></i>
+                <span>電視</span>
+              </router-link>
+            </div>
+          </transition>
+        </div>
+
         <router-link to="/dashboard/orders" class="nav-link">
           <i class="bi bi-cart-check"></i>
           <span>訂單管理</span>
@@ -51,9 +77,18 @@
   </div>
 </template>
 <script setup>
+import { ref } from 'vue'
 import { useAuth } from '../../composable/useAuth'
 
 const { user, logout } = useAuth()
+
+// 商品管理選單展開狀態
+const isProductsMenuOpen = ref(true)
+
+const toggleProductsMenu = () => {
+  isProductsMenuOpen.value = !isProductsMenuOpen.value
+}
+
 const handleLogout = () => {
   logout()
 }
@@ -241,6 +276,79 @@ const handleLogout = () => {
 
 .nav-link.router-link-active i {
   transform: scale(1.1);
+}
+
+/* 商品管理群組樣式 */
+.nav-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-group-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-group-header .toggle-icon {
+  margin-left: auto;
+  font-size: 0.85rem;
+  transition: transform 0.3s ease;
+}
+
+.nav-submenu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.25rem;
+  padding-left: 1rem;
+  overflow: hidden;
+}
+
+.nav-sublink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  position: relative;
+  margin-bottom: 0.25rem;
+}
+
+.nav-sublink i {
+  font-size: 0.75rem;
+  width: 16px;
+  text-align: center;
+}
+
+.nav-sublink:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  padding-left: 1.25rem;
+}
+
+.nav-sublink.router-link-active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 600;
+}
+
+/* 展開/收合動畫 */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 /* 自訂捲軸 */

@@ -1,6 +1,6 @@
 <template>
   <div class="product-more-page">
-    <LoadingOverlay :active="isLoading" loader="spinner" color="#7030a0" message="讀取中..." />
+    <LoadingOverlay :active="isLoading" color="#7030a0" message="讀取中..." />
 
     <div class="container" v-if="product">
       <!-- 上方：左右兩欄布局 -->
@@ -63,16 +63,65 @@
 
       <!-- 下方：完整說明與其他產品圖片 -->
       <div class="product-detail-section">
-        <!-- 完整說明 -->
+        <!-- Tab 切換說明 -->
         <div class="detail-description">
           <h2 class="section-title">
             <i class="bi bi-file-text"></i>
             產品詳細說明
           </h2>
-          <div class="description-content">
-            <p>{{ product.description || '暫無詳細說明' }}</p>
-            <div v-for="product in products" :key="product.id">
-              <img :src="product.images" :alt="product.title">
+
+          <!-- Tab 頁籤 -->
+          <div class="tab-navigation">
+            <button class="tab-btn" :class="{ active: activeTab === 'intro' }" @click="activeTab = 'intro'">
+              <i class="bi bi-info-circle"></i>
+              產品介紹
+            </button>
+            <button class="tab-btn" :class="{ active: activeTab === 'spec' }" @click="activeTab = 'spec'">
+              <i class="bi bi-clipboard-data"></i>
+              產品規格
+            </button>
+          </div>
+
+          <!-- Tab 內容 -->
+          <div class="tab-content">
+            <!-- 介紹頁籤 -->
+            <div v-if="activeTab === 'intro'" class="tab-pane intro-pane">
+              <!-- 第一列：左邊圖片1，右邊說明文字 -->
+              <div class="intro-row">
+                <div class="intro-col intro-col-left">
+                  <div v-if="product.images && product.images[0]" class="image-wrapper">
+                    <img :src="product.images[0]" alt="產品圖片1" class="product-detail-img" @error="handleImageError" />
+                  </div>
+                </div>
+                <div class="intro-col intro-col-right">
+                  <div class="intro-text">
+                    <p>{{ product.description || '暫無詳細說明' }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 第二列：左邊預設圖片，右邊圖片2 -->
+              <div class="intro-row">
+                <div class="intro-col intro-col-left">
+                  <div class="image-wrapper">
+                    <img src="/img/defaultblock.731a071a.jpg" alt="產品展示" class="product-detail-img"
+                      @error="handleImageError" />
+                  </div>
+                </div>
+                <div class="intro-col intro-col-right">
+                  <div v-if="product.images && product.images[1]" class="image-wrapper">
+                    <img :src="product.images[1]" alt="產品圖片2" class="product-detail-img" @error="handleImageError" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 規格頁籤 -->
+            <div v-if="activeTab === 'spec'" class="tab-pane spec-pane">
+              <div class="spec-image">
+                <img src="/img/specification.4bd5d369.png" alt="產品規格" class="specification-img"
+                  @error="handleImageError" />
+              </div>
             </div>
           </div>
         </div>
@@ -81,7 +130,7 @@
         <div class="related-products" v-if="relatedProducts.length > 0">
           <h2 class="section-title">
             <i class="bi bi-grid-3x3-gap"></i>
-            相關產品
+            你可能感興趣的
           </h2>
           <div class="related-grid">
             <div class="related-item" v-for="item in relatedProducts" :key="item.id" @click="goToProduct(item.id)">
@@ -97,18 +146,18 @@
         </div>
       </div>
     </div>
-
     <!-- 空狀態 -->
     <div class="empty-state" v-else-if="!isLoading">
       <i class="bi bi-box-seam"></i>
       <h3>商品不存在</h3>
-      <p>您查看的商品不存在或已下架，請返回<router-link to="/products/headphone">商品列表</router-link>繼續選購。</p>
+      <p>您查看的商品不存在或已下架，請至點選其他商品繼續選購。</p>
     </div>
+    <ServiceCard />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useStatusStore } from '../../store/statusStore'
@@ -116,6 +165,7 @@ import { useProductStore } from '../../store/productStore'
 import { useFavorite } from '../../composable/useFavorite';
 import { useCart } from '../../composable/useCart'
 import { showToast } from '../../composable/useToast'
+import ServiceCard from '../../components/ServiceCard.vue'
 import LoadingOverlay from '../../components/backstage/LoadingOverlay.vue';
 
 const route = useRoute()
@@ -127,7 +177,9 @@ const { favorites, favoriteIds, toggleFavorite, getFavorite } = useFavorite()
 const { addToCart: addToCartAction } = useCart()
 
 const product = ref(null)
+const productImages = ref([])
 const quantity = ref(1)
+const activeTab = ref('intro') // intro 或 spec
 
 // 是否已加入追蹤清單
 const isFavorite = computed(() => {
@@ -140,7 +192,7 @@ const relatedProducts = computed(() => {
 
   return productStore.allProducts
     .filter(p =>
-      p.id !== product.value.id && // 排除當前產品
+      p.id !== product.value.id && // 排除目前產品
       (p.category === product.value.category || p.unit === product.value.unit) // 同類別或同單位
     )
     .slice(0, 4) // 最多顯示 4 個
@@ -157,9 +209,11 @@ const loadProduct = async () => {
 
   // 從 store 中尋找產品
   product.value = productStore.allProducts.find(p => p.id === productId)
+  productImages.value = product.value?.images || []
 
   if (!product.value) {
-    showToast('找不到該產品', 'error')
+    // 產品不存在，跳轉到404頁面
+    router.replace({ name: '404Page' })
   }
 }
 
@@ -194,9 +248,7 @@ const handleToggleFavorite = () => {
 // 跳轉到其他產品
 const goToProduct = (productId) => {
   router.push({ name: 'ProductId', params: { productId } })
-  // 重新載入產品資料
-  loadProduct()
-  scrollToTop()
+  // 導航後由 watch 處理滾動和載入
 }
 
 // 圖片錯誤處理
@@ -205,21 +257,53 @@ const handleImageError = (event) => {
 }
 
 const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
+  // 多重備份機制確保行動裝置也能滾動
+  // 方法1: 原始語法（最可靠）
+  window.scrollTo(0, 0)
+  
+  // 方法2: 同時滾動 document 元素（某些行動瀏覽器需要）
+  if (document.documentElement) {
+    document.documentElement.scrollTop = 0
+  }
+  if (document.body) {
+    document.body.scrollTop = 0
+  }
 }
 
-watch(() => route.params.productId, () => {
-  loadProduct()
-  scrollToTop()
+// 監聽路由參數變化
+watch(() => route.params.productId, async (newId, oldId) => {
+  if (newId) {
+    // 立即滾動
+    scrollToTop()
+    
+    // 延遲備份滾動（等待 router 處理完成）
+    setTimeout(() => {
+      scrollToTop()
+    }, 0)
+    
+    // 載入資料後再次確保位置
+    await nextTick()
+    await loadProduct()
+    
+    // 最後再次滾動確保（針對資料載入後的佈局變化）
+    setTimeout(() => {
+      scrollToTop()
+    }, 50)
+  }
 })
 
 onMounted(async () => {
   getFavorite()
-  await loadProduct()
+  
+  // 首次載入時也確保滾動到頂部
   scrollToTop()
+  
+  await loadProduct()
+  
+  // 載入完成後再次確保位置
+  setTimeout(() => {
+    scrollToTop()
+  }, 50)
 })
 </script>
 
@@ -232,7 +316,7 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
 .product-more-page {
   min-height: 100vh;
   background: linear-gradient(to bottom, #f7fafc 0%, #fff 100%);
-  padding: 3rem 0;
+  padding: 2rem 0 0 0;
 }
 
 .container {
@@ -476,6 +560,8 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .detail-description,
@@ -484,35 +570,218 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   border-radius: 20px;
   padding: 2.5rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #2d3748 !important;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid #e2e8f0;
+  opacity: 1 !important;
+  visibility: visible !important;
 
   i {
     color: $primary-color;
   }
 }
 
+// Tab 導覽列
+.tab-navigation {
+  display: flex !important;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 3px solid #e2e8f0;
+  padding-bottom: 0;
+  background: #f7fafc;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 1.2rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 4px solid transparent;
+  color: #718096;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  position: relative;
+  margin-bottom: -3px;
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  i {
+    font-size: 1.3rem;
+  }
+
+  &:hover {
+    color: $primary-color;
+    background: rgba($primary-color, 0.1);
+  }
+
+  &.active {
+    color: white !important;
+    background: linear-gradient(135deg, $primary-color, $secondary-color);
+    border-bottom-color: transparent;
+    box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+
+    i {
+      transform: scale(1.15);
+    }
+  }
+}
+
+// Tab 內容區域
+.tab-content {
+  padding: 2rem;
+  background: white;
+  border-radius: 0 0 12px 12px;
+  min-height: 500px;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+.tab-pane {
+  min-height: 400px;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+// 介紹頁籤樣式
+.intro-pane {
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  // 每一列的容器
+  .intro-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    align-items: center;
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  // 左右兩欄
+  .intro-col {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .intro-col-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .intro-col-right {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .intro-text {
+    line-height: 1.8;
+    color: #4a5568 !important;
+    font-size: 1rem;
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    p {
+      margin: 0;
+      white-space: pre-line;
+      color: #4a5568 !important;
+      opacity: 1 !important;
+    }
+  }
+
+  .image-wrapper {
+    width: 100%;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+
+  .product-detail-img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+
+  }
+}
+
+// 規格頁籤樣式
+.spec-pane {
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  .spec-image {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .specification-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
 .description-content {
   line-height: 1.8;
-  color: #4a5568;
+  color: #4a5568 !important;
   font-size: 1rem;
+  opacity: 1 !important;
+  visibility: visible !important;
 
   p {
     margin: 0;
+    color: #4a5568 !important;
   }
 
   .formatted-text {
     white-space: pre-line; // 保留換行符，自動換行
+    color: #4a5568 !important;
   }
 }
 
@@ -531,7 +800,7 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   }
 
   @media (max-width: 576px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -620,6 +889,44 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
         color: $secondary-color;
       }
     }
+  }
+}
+
+// Tab 響應式設計
+@media (max-width: 768px) {
+  .tab-btn {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  .tab-pane {
+    min-height: 300px;
+  }
+
+  .detail-description,
+  .related-products {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .tab-btn {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.85rem;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    i {
+      font-size: 1.2rem;
+    }
+  }
+
+  .tab-navigation {
+    gap: 0.25rem;
   }
 }
 </style>

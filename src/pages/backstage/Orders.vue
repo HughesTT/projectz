@@ -1,6 +1,6 @@
 <template>
   <div class="product-page">
-    <LoadingOverlay :active="isLoading" loader="spinner" color="#7030a0" message="讀取中..." />
+    <LoadingOverlay :active="isLoading" color="#7030a0" message="讀取中..." />
 
     <!-- 頁面標題 -->
     <div class="page-header">
@@ -23,7 +23,7 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th style="width: 180px">訂單編號</th>
+              <th style="width: 220px">訂單編號</th>
               <th>購買人</th>
               <th style="width: 180px" class="text-center">下單時間</th>
               <th style="width: 120px" class="text-end">金額</th>
@@ -177,16 +177,20 @@ const handlePaymentToggle = async (order) => {
   const statusText = newStatus ? '已付款' : '未付款'
 
   // 先更新本地狀態（樂觀更新）
+  const originalStatus = order.is_paid
   order.is_paid = newStatus
 
-  // 調用後端 API 更新
-  const result = await orderStore.updatePaid(order)
+  // 呼叫後端 API 更新（只傳遞必要的數據）
+  const result = await orderStore.updatePaid({
+    id: order.id,
+    is_paid: newStatus
+  })
 
   if (result.success) {
     showToast(`付款狀態已更新為「${statusText}」`, 'success')
   } else {
     // 如果失敗，還原狀態
-    order.is_paid = !newStatus
+    order.is_paid = originalStatus
     showToast(result.message || '付款狀態更新失敗', 'error')
   }
 }

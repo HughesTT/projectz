@@ -11,7 +11,9 @@ export const useProductStore = defineStore('productStore', () => {
   const allProducts = ref([])
   const pages = ref({})
   // 預設選擇的分類
-const selectedCategory = ref('all')
+  const selectedCategory = ref('all')
+  // 預設選擇的產品類型（unit）
+  const selectedUnit = ref('headphone')
   
   // getters
   const sortProducts = computed(() => {
@@ -270,6 +272,17 @@ const selectedCategory = ref('all')
 
   // 導向指定產品頁面
   const goToProduct = (productId) => {
+    // 先立即滾動到頂部（使用最可靠的原始語法）
+    window.scrollTo(0, 0)
+    
+    // 同時滾動 document 元素（行動裝置需要）
+    if (document.documentElement) {
+      document.documentElement.scrollTop = 0
+    }
+    if (document.body) {
+      document.body.scrollTop = 0
+    }
+    
     router.push({ name: 'ProductId', params: { productId } })
   }
 
@@ -288,17 +301,19 @@ const selectedCategory = ref('all')
 
   // 根據選擇的分類過濾產品
   const filteredProducts = computed(() => {
-    // 過濾出 unit 為 headphone 的產品
-    const headphones = allProducts.value.filter(product => product.unit === 'headphone')
+    // 根據 selectedUnit 動態過濾產品
+    const unitProducts = allProducts.value.filter(product => 
+      product.unit === selectedUnit.value
+    )
 
-    // 選擇全部，回傳所有耳機產品
+    // 選擇全部，回傳該 unit 的所有產品
     if (selectedCategory.value === 'all') {
-      return headphones
+      return unitProducts
     }
 
     // 根據選擇的分類進一步過濾
     // 這裡假設產品的 category 欄位存儲了子分類資訊
-    return headphones.filter(product => {
+    return unitProducts.filter(product => {
       const category = product.category?.toLowerCase() || '' // 定義的 category 為小寫字串
       return category.includes(selectedCategory.value) ||
         category === selectedCategory.value.replace('-', ' ') // 處理分類有 '-' 的資料
@@ -317,6 +332,7 @@ const selectedCategory = ref('all')
     pages,
     goToProduct,
     selectedCategory,
+    selectedUnit,
     filteredProducts,
   }
 })

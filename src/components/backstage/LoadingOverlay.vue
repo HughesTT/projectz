@@ -2,7 +2,10 @@
   <Transition name="fade">
     <div v-if="active" class="loading-overlay" :class="{ 'full-page': isFullPage }">
       <div class="loading-container">
-        <div class="loading-spinner" :class="loaderClass">
+        <!-- Spinner 樣式不需要內部元素 -->
+        <div v-if="loader === 'spinner'" class="loading-spinner loader-spinner"></div>
+        <!-- Dots 和 Bars 需要內部元素 -->
+        <div v-else class="loading-spinner" :class="loaderClass">
           <div v-for="n in dots" :key="n" class="dot"></div>
         </div>
         <div v-if="message" class="loading-message">{{ message }}</div>
@@ -25,7 +28,7 @@ const props = defineProps({
   },
   loader: {
     type: String,
-    default: 'dots',
+    default: 'bars',
     validator: (value) => ['dots', 'spinner', 'bars'].includes(value)
   },
   color: {
@@ -44,7 +47,9 @@ const props = defineProps({
 
 // 計算 loader 的點數
 const dots = computed(() => {
-  return props.loader === 'dots' ? 5 : 1
+  if (props.loader === 'dots') return 5
+  if (props.loader === 'bars') return 5
+  return 0 // spinner 不需要內部元素
 })
 
 const loaderClass = computed(() => `loader-${props.loader}`)
@@ -94,6 +99,18 @@ const loaderClass = computed(() => `loader-${props.loader}`)
 
 .loader-dots .dot:nth-child(2) {
   animation-delay: -0.16s;
+}
+
+.loader-dots .dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+.loader-dots .dot:nth-child(4) {
+  animation-delay: 0.16s;
+}
+
+.loader-dots .dot:nth-child(5) {
+  animation-delay: 0.32s;
 }
 
 @keyframes dot-bounce {
@@ -149,6 +166,18 @@ const loaderClass = computed(() => `loader-${props.loader}`)
 
 .loader-bars .dot:nth-child(2) {
   animation-delay: -0.12s;
+}
+
+.loader-bars .dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+.loader-bars .dot:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+.loader-bars .dot:nth-child(5) {
+  animation-delay: 0.24s;
 }
 
 @keyframes bar-stretch {

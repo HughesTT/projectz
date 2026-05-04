@@ -1,17 +1,7 @@
 <template>
-  <LoadingOverlay :active="isLoading" loader="spinner" color="#7030a0" message="讀取中..." />
+  <LoadingOverlay :active="isLoading" color="#7030a0" message="讀取中..." />
 
   <div class="headphone-page">
-    <!-- 頁面標題區 -->
-    <div class="page-header">
-      <div class="header-content">
-        <h1 class="page-title">
-          <i class="bi bi-headphones"></i>
-          耳機專區
-        </h1>
-        <p class="page-subtitle">精選各式耳機，滿足您的聽覺享受</p>
-      </div>
-    </div>
 
     <!-- 主要內容區 -->
     <div class="container">
@@ -21,29 +11,33 @@
           <div class="sidebar-header">
             <h3>產品分類</h3>
           </div>
-          <ul class="category-list">
-            <li :class="{ active: selectedCategory === 'all' }" @click="selectedCategory = 'all'">
-              <i class="bi bi-circle-fill"></i>
-              全部商品
-            </li>
-            <li :class="{ active: selectedCategory === 'bluetooth' }" @click="selectedCategory = 'bluetooth'">
-              <i class="bi bi-bluetooth"></i>
-              Bluetooth
-            </li>
-            <li :class="{ active: selectedCategory === 'gaming' }" @click="selectedCategory = 'gaming'">
-              <i class="bi bi-controller"></i>
-              Gaming
-            </li>
-            <li :class="{ active: selectedCategory === 'noise-canceling' }"
-              @click="selectedCategory = 'noise-canceling'">
-              <i class="bi bi-headphones"></i>
-              Noise Cancelling
-            </li>
-            <li :class="{ active: selectedCategory === 'music-glasses' }" @click="selectedCategory = 'music-glasses'">
-              <i class="bi bi-sunglasses"></i>
-              Music Glasses
-            </li>
-          </ul>
+          <div class="category-scroll-wrapper">
+            <ul ref="categoryList" class="category-list" @scroll="checkScroll">
+              <li :class="{ active: selectedCategory === 'all' }" @click="selectedCategory = 'all'">
+                <i class="bi bi-circle-fill"></i>
+                全系列耳機
+              </li>
+              <li :class="{ active: selectedCategory === '藍芽' }" @click="selectedCategory = '藍芽'">
+                <i class="bi bi-bluetooth"></i>
+                藍芽耳機
+              </li>
+              <li :class="{ active: selectedCategory === '電競' }" @click="selectedCategory = '電競'">
+                <i class="bi bi-controller"></i>
+                電競耳機
+              </li>
+              <li :class="{ active: selectedCategory === '降噪' }" @click="selectedCategory = '降噪'">
+                <i class="bi bi-headphones"></i>
+                降噪耳機
+              </li>
+              <li :class="{ active: selectedCategory === '音樂眼鏡' }" @click="selectedCategory = '音樂眼鏡'">
+                <i class="bi bi-sunglasses"></i>
+                音樂眼鏡
+              </li>
+            </ul>
+            <div class="scroll-indicator" v-show="showScrollIndicator">
+              <i class="bi bi-chevron-right"></i>
+            </div>
+          </div>
         </aside>
 
         <!-- 右側產品列表 -->
@@ -93,8 +87,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useRoute, useRouter } from 'vue-router';
 import { useStatusStore } from '../../store/statusStore';
 import { useProductStore } from '../../store/productStore';
 import { useFavorite } from '../../composable/useFavorite'
@@ -102,23 +97,50 @@ import LoadingOverlay from '../../components/backstage/LoadingOverlay.vue';
 
 const productStore = useProductStore();
 const statusStore = useStatusStore();
+const route = useRoute();
 const { goToProduct } = productStore // 函式直接解構
-const { selectedCategory, filteredProducts } = storeToRefs(productStore) // 響應式數據用 storeToRefs
+const { selectedCategory, selectedUnit, filteredProducts } = storeToRefs(productStore) // 響應式數據用 storeToRefs
 const { isLoading } = storeToRefs(statusStore);
 
 // 使用 useFavorite composable 管理追蹤清單
 const { favorites, favoriteIds, toggleFavorite, getFavorite } = useFavorite()
+
+const currentPage = ref('') // 當前頁面名稱
+const categoryList = ref(null) // 分類列表 ref
+const showScrollIndicator = ref(false) // 是否顯示滾動指示器
 
 // 圖片載入錯誤處理
 const handleImageError = (event) => {
   event.target.src = 'https://via.placeholder.com/300x300?text=No+Image'
 }
 
+// 檢查是否需要顯示滾動指示器
+const checkScroll = () => {
+  if (categoryList.value) {
+    const element = categoryList.value
+    const hasScroll = element.scrollWidth > element.clientWidth
+    const isAtEnd = element.scrollLeft + element.clientWidth >= element.scrollWidth - 5
+    showScrollIndicator.value = hasScroll && !isAtEnd
+  }
+}
+
 onMounted(async () => {
+  selectedCategory.value = 'all' // 重置分類為全部
+  selectedUnit.value = 'headphone' // 設置當前產品類型為耳機
   await productStore.getAllProducts()
+  currentPage.value = '耳機' // 更新目前頁面名稱
   getFavorite()
 
-  console.log('產品資料:', productStore.allProducts)
+  // 檢查滾動指示器
+  await nextTick()
+  checkScroll()
+  window.addEventListener('resize', checkScroll)
+})
+
+// 清理事件監聽
+import { onUnmounted } from 'vue'
+onUnmounted(() => {
+  window.removeEventListener('resize', checkScroll)
 })
 </script>
 
@@ -242,12 +264,13 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   align-items: start;
 
   @media (max-width: 992px) {
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 240px 2fr;
     gap: 1.5rem;
   }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
 
@@ -260,6 +283,9 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (max-width: 768px) {
     position: static;
+    top: 0;
+    border-radius: $radius-sm;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 }
 
@@ -267,6 +293,10 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: $gradient-primary;
   color: $bg-white;
   padding: 1.25rem 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0.875rem 1rem;
+  }
 
   h3 {
     margin: 0;
@@ -276,9 +306,63 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     align-items: center;
     gap: 0.625rem;
 
-    i {
+    @media (max-width: 768px) {
       font-size: 1rem;
     }
+
+    i {
+      font-size: 1rem;
+
+      @media (max-width: 768px) {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+.category-scroll-wrapper {
+  position: relative;
+
+  @media (max-width: 768px) {
+    position: relative;
+  }
+}
+
+.scroll-indicator {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.95));
+    pointer-events: none;
+    z-index: 10;
+
+    i {
+      font-size: 1.5rem;
+      color: $primary-color;
+      animation: slideRight 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes slideRight {
+
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(5px);
+    opacity: 0.5;
   }
 }
 
@@ -286,6 +370,20 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   list-style: none;
   margin: 0;
   padding: 1rem;
+
+  @media (max-width: 768px) {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.75rem;
+    gap: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 
   li {
     padding: 0.875rem 1rem;
@@ -302,9 +400,23 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     align-items: center;
     gap: 0.75rem;
 
+    @media (max-width: 768px) {
+      flex-shrink: 0;
+      white-space: nowrap;
+      margin-bottom: 0;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      gap: 0.5rem;
+      border-radius: 20px;
+    }
+
     i {
       font-size: 0.75rem;
       transition: transform $transition-fast;
+
+      @media (max-width: 768px) {
+        font-size: 0.85rem;
+      }
     }
 
     &:last-child {
@@ -324,6 +436,10 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
       transform: translateX(5px);
+
+      @media (max-width: 768px) {
+        transform: translateY(-2px);
+      }
     }
 
     &.active {
@@ -351,16 +467,23 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   grid-template-columns: repeat(4, 1fr);
 
   @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.75rem;
   }
 
   @media (max-width: 768px) {
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
   }
 
   @media (max-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 400px) {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 1rem;
   }
 }
 
@@ -393,7 +516,7 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   width: 100%;
   padding-top: 100%;
-  background: linear-gradient(135deg, #f8f9fa, $bg-gray);
+  // background: linear-gradient(135deg, #f8f9fa, $bg-gray);
   overflow: hidden;
 }
 
@@ -427,10 +550,32 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   z-index: 2;
 
+  @media (max-width: 768px) {
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 38px;
+    height: 38px;
+  }
+
+  @media (max-width: 576px) {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 36px;
+    height: 36px;
+  }
+
   i {
     font-size: 1.3rem;
     color: $text-light;
     transition: color $transition-fast;
+
+    @media (max-width: 768px) {
+      font-size: 1.15rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 1.1rem;
+    }
   }
 
   &:hover {
@@ -477,6 +622,14 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   flex-direction: column;
   flex: 1;
   background: $bg-white;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+  }
+
+  @media (max-width: 576px) {
+    padding: 1rem;
+  }
 }
 
 .product-title {
@@ -493,6 +646,17 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   line-height: 1.5;
   min-height: 3rem;
   transition: color $transition-fast;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    min-height: 2.8rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.95rem;
+    min-height: 2.6rem;
+    margin-bottom: 0.375rem;
+  }
 
   .product-card:hover & {
     color: $primary-color;
@@ -511,6 +675,19 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: $radius-sm;
   display: inline-block;
   align-self: flex-start;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 .product-footer {
@@ -524,10 +701,22 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   align-items: baseline;
   gap: 0.375rem;
 
+  @media (max-width: 768px) {
+    gap: 0.25rem;
+  }
+
   .price-label {
     font-size: 0.9rem;
     color: $text-light;
     font-weight: 500;
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 0.8rem;
+    }
   }
 
   .price-value {
@@ -537,6 +726,14 @@ $transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 1.375rem;
+    }
   }
 }
 

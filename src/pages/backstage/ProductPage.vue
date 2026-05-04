@@ -1,12 +1,12 @@
 <template>
   <div class="product-page">
-    <LoadingOverlay :active="isLoading" loader="spinner" color="#7030a0" message="讀取中..." />
+    <LoadingOverlay :active="isLoading" color="#7030a0" message="讀取中..." />
 
     <!-- 頁面標題 -->
     <div class="page-header">
       <h2 class="bs-purple">
         <i class="bi bi-box-seam me-2"></i>
-        產品管理
+        {{ pageTitle }}
       </h2>
       <button class="btn btn-purple" @click="handleCreate">
         <i class="bi bi-plus-lg me-2"></i>
@@ -17,9 +17,9 @@
     <!-- 產品列表 -->
     <div class="products-container">
       <!-- 無產品時顯示 -->
-      <div v-if="products.length === 0 && !isLoading" class="empty-state">
+      <div v-if="filteredProducts.length === 0 && !isLoading" class="empty-state">
         <i class="bi bi-inbox"></i>
-        <p>尚未有產品資料</p>
+        <p>{{ emptyMessage }}</p>
       </div>
 
       <!-- 產品表格 -->
@@ -37,7 +37,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="product in products" :key="product.id">
+            <tr v-for="product in paginatedProducts" :key="product.id">
               <!-- 圖片 -->
               <td>
                 <img :src="product.imageUrl" :alt="product.title" class="product-thumbnail" @error="handleImageError">
@@ -94,11 +94,11 @@
       </div>
     </div>
     <!-- 產品統計資訊 -->
-    <div v-if="products.length > 0" class="products-stats">
+    <div v-if="filteredProducts.length > 0" class="products-stats">
       <span class="text-muted mt-2 ms-2 d-block">
-        共 <strong>{{ products.length }}</strong> 筆產品
+        共 <strong>{{ totalCount }}</strong> 筆產品
       </span>
-      <PaginationEl :pages="productStore.pages" @emit-pages="productStore.getProducts" />
+      <PaginationEl :pages="paginationInfo" @emit-pages="handlePageChange" />
     </div>
   </div>
   <ProductModal ref="productModalRef" :product="selectedProduct" :isNew="isNewProduct"
@@ -106,7 +106,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useStatusStore } from '../../store/statusStore'
 import { useProductStore } from '../../store/productStore'
@@ -117,11 +118,12 @@ import PaginationEl from '../../components/PaginationEl.vue'
 
 
 // 使用 Pinia 狀態管理
+const route = useRoute()
 const productStore = useProductStore()
 const statusStore = useStatusStore()
 
 // 使用 storeToRefs 取得響應式資料
-const { products } = storeToRefs(productStore)
+const { allProducts } = storeToRefs(productStore)
 const { isLoading } = storeToRefs(statusStore)
 
 // Modal 相關狀態
@@ -129,10 +131,88 @@ const productModalRef = ref(null)
 const selectedProduct = ref({})
 const isNewProduct = ref(true)
 
+// 當前頁碼
+const currentPage = ref(1)
+
+// 類別對照表
+const categoryMap = {
+  'headphone': '耳機',
+  'speaker': '喇叭',
+  'tv': '電視'
+}
+
+// 取得當前類別參數（從路由）
+const currentCategory = computed(() => route.params.category || null)
+
+// 頁面標題
+const pageTitle = computed(() => {
+  if (currentCategory.value) {
+    return `${categoryMap[currentCategory.value] || currentCategory.value}管理`
+  }
+  return '產品管理'
+})
+
+// 空狀態訊息
+const emptyMessage = computed(() => {
+  if (currentCategory.value) {
+    return `尚未有${categoryMap[currentCategory.value] || currentCategory.value}類別的產品`
+  }
+  return '尚未有產品資料'
+})
+
+// 篩選產品（根據 unit 欄位）
+const filteredProducts = computed(() => {
+  if (!currentCategory.value) {
+    return allProducts.value
+  }
+  return allProducts.value.filter(product =>
+    product.unit && product.unit.toLowerCase() === currentCategory.value.toLowerCase()
+  )
+})
+
+// 分頁後的產品列表
+const paginatedProducts = computed(() => {
+  const itemsPerPage = 10
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredProducts.value.slice(start, end)
+})
+
+// 總筆數
+const totalCount = computed(() => filteredProducts.value.length)
+
+// 分頁資訊（客戶端分頁）
+const paginationInfo = computed(() => {
+  const itemsPerPage = 10
+  const total = filteredProducts.value.length
+  const totalPages = Math.ceil(total / itemsPerPage)
+
+  return {
+    total_pages: totalPages,
+    current_page: currentPage.value,
+    has_pre: currentPage.value > 1,
+    has_next: currentPage.value < totalPages,
+    category: currentCategory.value
+  }
+})
+
 // 頁面載入時取得產品資料
 onMounted(async () => {
-  await productStore.getProducts()
+  await productStore.getAllProducts()
+  currentPage.value = 1
 })
+
+// 監聽路由變化
+watch(() => route.params.category, async () => {
+  currentPage.value = 1
+  // 不需要重新載入，因為已經有所有產品資料
+})
+
+// 處理分頁變化（客戶端分頁）
+const handlePageChange = (page) => {
+  currentPage.value = page
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
 // 價格千分位格式化
 const formatPrice = (price) => {
@@ -173,6 +253,8 @@ const handleDelete = async (product) => {
 
   if (result.success) {
     showToast(result.message, 'success')
+    // 重新載入所有產品資料
+    await productStore.getAllProducts()
   } else {
     showToast(result.message, 'error')
   }
@@ -192,6 +274,8 @@ const handleUpdateProduct = async (product) => {
   if (result.success) {
     showToast(result.message, 'success')
     productModalRef.value?.hideModal()
+    // 重新載入所有產品資料
+    await productStore.getAllProducts()
   } else {
     showToast(result.message, 'error')
   }

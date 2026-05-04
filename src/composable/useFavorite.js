@@ -36,7 +36,6 @@ export const useFavorite = () => {
       // 確保是陣列
       if (Array.isArray(parsed)) { // 如果是陣列，直接使用
         favorites.value = parsed
-        console.log('追蹤清單:', favorites.value)
       } else {
         // 如果不是陣列，清空並重置
         favorites.value = []

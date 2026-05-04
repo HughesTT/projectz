@@ -51,7 +51,7 @@
                       <span v-if="tempOrder.paid_date">
                         {{ formatDate(tempOrder.paid_date) }}
                       </span>
-                      <span v-else>尚未付款</span>
+                      <span v-else>{{ isPaid ? '已付款' : '未付款' }}</span>
                     </td>
                   </tr>
                   <tr>

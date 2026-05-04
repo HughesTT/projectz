@@ -30,7 +30,7 @@
                 </div>
                 <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
                 <!-- 延伸技巧，多圖 -->
-                <div class="mt-5" v-if="tempProduct.images">
+                <div class="mt-5">
                   <div v-for="(image, key) in tempProduct.images" class="mb-3 input-group" :key="key">
                     <input type="url" class="form-control form-control" v-model="tempProduct.images[key]"
                       placeholder="請輸入連結" />
@@ -39,7 +39,7 @@
                     </button>
                   </div>
                   <div v-if="
-                    tempProduct.images[tempProduct.images.length - 1] || !tempProduct.images.length
+                    !tempProduct.images.length || tempProduct.images[tempProduct.images.length - 1]
                   ">
                     <button class="btn btn-outline-primary btn-sm d-block w-100" @click="tempProduct.images.push('')">
                       新增圖片
@@ -164,7 +164,10 @@ const tempProduct = ref({
 // 監聽 props.product 變化，更新 tempProduct
 watch(() => props.product, (newProduct) => {
   if (newProduct && Object.keys(newProduct).length > 0) {
-    tempProduct.value = { ...newProduct }
+    tempProduct.value = {
+      ...newProduct,
+      images: newProduct.images || [] // 確保 images 始終是陣列
+    }
   } else {
     // 新增模式：重置為預設值
     tempProduct.value = {

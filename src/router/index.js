@@ -60,23 +60,28 @@ const routes = [
     children: [
       {
         path: '/products/headphone',
-        name: 'HeadPhone',
+        name: '耳機',
         component: () => import('../pages/products/HeadPhone.vue')
       },
       {
         path: '/products/speaker',
-        name: 'SoundBar',
+        name: '揚聲器',
         component: () => import('../pages/products/Speaker.vue')
       },
       {
         path: '/products/tv',
-        name: 'TV',
+        name: '電視',
         component: () => import('../pages/products/TV.vue')
       },
       {
         path: ':productId',
         name: 'ProductId',
         component: () => import('../pages/products/ProductMore.vue')
+      },
+      {
+        path: '/result',
+        name: '商品搜尋',
+        component: () => import('../pages/backstage/SearchPage.vue')
       }
     ]
   },
@@ -101,6 +106,11 @@ const routes = [
         component: () => import('../pages/backstage/ProductPage.vue')
       },
       {
+        path: 'products/:category',
+        name: 'BackstageProductsByCategory',
+        component: () => import('../pages/backstage/ProductPage.vue')
+      },
+      {
         path: 'coupons',
         name: 'Coupons',
         component: () => import('../pages/backstage/Coupons.vue')
@@ -111,16 +121,48 @@ const routes = [
         component: () => import('../pages/backstage/Orders.vue')
       },
     ]
-  }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404Page',
+    component: () => import('../pages/404Page.vue'),
+  },
 ]
 
 const router = createRouter({
   history: createWebHashHistory('/ProjectZ/'),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 如果有保存的位置（例如使用瀏覽器的前進/後退按鈕）
+    if (savedPosition) {
+      return savedPosition
+    }
+    // 如果有 hash（錨點連結）
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth'
+      }
+    }
+    
+    // 針對產品詳細頁面，使用立即滾動
+    if (to.name === 'ProductId') {
+      // 使用原始語法確保行動裝置相容性
+      setTimeout(() => {
+        window.scrollTo(0, 0)
+        if (document.documentElement) document.documentElement.scrollTop = 0
+        if (document.body) document.body.scrollTop = 0
+      }, 0)
+      return { top: 0, left: 0 }
+    }
+    
+    // 預設情況：滾動到頂部
+    return { top: 0, behavior: 'auto' }
+  }
 })
 
-// 路由守衛：檢查是否需要登入
-router.beforeEach((to, from, next) => {
+// 路由檢查是否需要登入
+router.beforeEach((to, from) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   
   if (requiresAuth) {
@@ -129,14 +171,14 @@ router.beforeEach((to, from, next) => {
     const memberToken = localStorage.getItem('memberToken') || sessionStorage.getItem('memberToken')
     
     if (memberUser && memberToken) {
-      next()
+      return true // 允許訪問
     } else {
       // 未登入，重定向到登入頁
-      next({ name: 'Login', query: { redirect: to.fullPath } })
+      return { name: 'Login', query: { redirect: to.fullPath } }
     }
-  } else {
-    next()
   }
+  
+  return true // 不需要驗證，允許訪問
 })
 
 export default router

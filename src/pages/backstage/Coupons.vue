@@ -1,6 +1,6 @@
 <template>
   <div class="coupon-page">
-    <LoadingOverlay :active="isLoading" loader="spinner" color="#7030a0" message="讀取中..." />
+    <LoadingOverlay :active="isLoading" color="#7030a0" message="讀取中..." />
 
     <!-- 頁面標題 -->
     <div class="page-header">

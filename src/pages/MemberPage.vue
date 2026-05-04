@@ -1,5 +1,6 @@
 <template>
   <Navbar />
+  <Breadcrum />
   <div class="member-page">
     <div class="member-container">
       <!-- 側邊導航 -->
@@ -44,6 +45,7 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
+import Breadcrum from '../components/Breadcrum.vue';
 import { useMemberAuth } from '../composable/useMemberAuth'
 
 const { currentUser } = useMemberAuth()

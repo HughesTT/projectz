@@ -23,29 +23,30 @@
             <div class="order-info">
               <div class="order-number">
                 <span class="label">訂單編號：</span>
-                <span class="value">{{ order.orderNumber || order.id }}</span>
+                <span class="value">{{ order.orderId || order.id }}</span>
               </div>
               <div class="order-date">
                 <i class="bi bi-calendar3"></i>
-                {{ formatDate(order.date) }}
+                {{ formatDate(order.createAt || order.date) }}
               </div>
             </div>
-            <div class="order-status" :class="getStatusClass(order.is_paid)">
-              {{ getStatusText(order.is_paid) }}
+            <div class="order-status" :class="getStatusClass(order)">
+              {{ getStatusText(order) }}
             </div>
           </div>
 
           <!-- 訂單商品列表 -->
           <div class="order-items" v-if="order.items && order.items.length > 0">
-            <div class="order-item" v-for="item in order.items" :key="item.id">
+            <div class="order-item" v-for="(item, index) in order.items" :key="item.product_id || item.id || index">
               <div class="item-image">
-                <img :src="item.imageUrl" :alt="item.title">
+                <img :src="item.product?.imageUrl || item.imageUrl" :alt="item.product?.title || item.title">
               </div>
               <div class="item-info">
-                <div class="item-name">{{ item.title }}</div>
-                <div class="item-quantity">數量：{{ item.quantity }}</div>
+                <div class="item-name">{{ item.product?.title || item.title }}</div>
+                <div class="item-quantity">數量：{{ item.qty || item.quantity }}</div>
               </div>
-              <div class="item-price">NT$ {{ (item.price * item.quantity).toLocaleString() }}</div>
+              <div class="item-price">NT$ {{ formatPrice(item.final_total || (item.price * (item.qty || item.quantity)))
+              }}</div>
             </div>
           </div>
 
@@ -53,19 +54,19 @@
           <div class="order-summary">
             <div class="summary-row">
               <span>商品小計</span>
-              <span>NT$ {{ order.subtotal.toLocaleString() }}</span>
+              <span>NT$ {{ formatPrice(calculateSubtotal(order)) }}</span>
             </div>
-            <div class="summary-row" v-if="order.discount > 0">
+            <div class="summary-row" v-if="getDiscount(order) > 0">
               <span>折扣</span>
-              <span class="discount">-NT$ {{ order.discount.toLocaleString() }}</span>
+              <span class="discount">-NT$ {{ formatPrice(getDiscount(order)) }}</span>
             </div>
             <div class="summary-row">
               <span>運費</span>
-              <span>NT$ {{ order.shippingFee.toLocaleString() }}</span>
+              <span>NT$ {{ formatPrice(order.shippingFee || 0) }}</span>
             </div>
             <div class="summary-row total">
               <span>訂單總額</span>
-              <span class="amount">NT$ {{ order.total.toLocaleString() }}</span>
+              <span class="amount">NT$ {{ formatPrice(order.total) }}</span>
             </div>
           </div>
         </div>
@@ -76,6 +77,8 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useOrderStore } from '../../store/orderStore'
+const orderStore = useOrderStore()
 
 // 訂單資料
 const orders = ref([])
@@ -90,13 +93,34 @@ const loadOrders = () => {
 // 訂單數量
 const orderCount = computed(() => orders.value.length)
 
-const getStatusText = (isPaid) => {
-  // 根據後端 API 的 is_paid 欄位顯示狀態
+// 格式化價格（安全處理 undefined）
+const formatPrice = (value) => {
+  if (value === undefined || value === null) return '0'
+  return Number(value).toLocaleString('zh-TW')
+}
+
+// 計算訂單小計
+const calculateSubtotal = (order) => {
+  if (!order.items || order.items.length === 0) return 0
+  return order.items.reduce((sum, item) => {
+    return sum + (item.final_total || (item.price * (item.qty || item.quantity || 0)))
+  }, 0)
+}
+
+// 取得折扣金額
+const getDiscount = (order) => {
+  return order.coupon?.discount || order.discount || 0
+}
+
+const getStatusText = (order) => {
+  // 支援兩種資料格式：status.paid 或 is_paid
+  const isPaid = order.status?.paid || order.is_paid
   return isPaid ? '已付款' : '未付款'
 }
 
-const getStatusClass = (isPaid) => {
-  // 根據付款狀態返回對應的 CSS 類名
+const getStatusClass = (order) => {
+  // 支援兩種資料格式：status.paid 或 is_paid
+  const isPaid = order.status?.paid || order.is_paid
   return isPaid ? 'status-paid' : 'status-unpaid'
 }
 

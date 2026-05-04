@@ -3,9 +3,11 @@
     <!-- 左側品牌展示區 -->
     <div class="brand-section">
       <div class="brand-content">
-        <div class="brand-logo">
-          <img src="../../public/img/logo.2dcc836c.png" alt="Logo">
-        </div>
+        <router-link to="/" class="brand-logo-link">
+          <div class="brand-logo">
+            <img src="../../public/img/logo.2dcc836c.png" alt="Logo">
+          </div>
+        </router-link>
         <h1 class="brand-title">Join Us</h1>
         <p class="brand-description">開始探索優質的影音體驗</p>
         <div class="brand-features">
@@ -33,12 +35,10 @@
       </div>
     </div>
     <!-- 返回首頁按鈕 -->
-    <div class="backhome">
-      <router-link to="/" class="backhome-link">
-        <i class="bi bi-house-door"></i>
-        回到首頁
-      </router-link>
-    </div>
+    <router-link to="/" class="back-home-btn">
+      <i class="bi bi-house-door"></i>
+      <span>回到首頁</span>
+    </router-link>
   </div>
 </template>
 
@@ -141,29 +141,57 @@ import RegisterForm from '../components/member/RegisterForm.vue'
   }
 }
 
-.backhome {
+/* 返回首頁按鈕 */
+.back-home-btn {
   position: fixed;
-  top: 1rem;
-  right: 0;
-  background: #667eea;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #bb9cdf;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 100;
+  backdrop-filter: blur(10px);
 
-  .backhome-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-
-    i {
-      font-size: 1.2rem;
-    }
+  i {
+    font-size: 1.2rem;
   }
 
   &:hover {
-    background: #5a67d8;
+    background: #bb9cdf;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(187, 156, 223, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+
+    span {
+      display: none;
+    }
+  }
+}
+
+/* Logo 可點擊 */
+.brand-logo-link {
+  display: block;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
   }
 }
 
