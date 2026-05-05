@@ -104,7 +104,7 @@
               <div class="intro-row">
                 <div class="intro-col intro-col-left">
                   <div class="image-wrapper">
-                    <img src="/img/defaultblock.731a071a.jpg" alt="產品展示" class="product-detail-img"
+                    <img :src="defaultBlockImg" alt="產品展示" class="product-detail-img"
                       @error="handleImageError" />
                   </div>
                 </div>
@@ -119,7 +119,7 @@
             <!-- 規格頁籤 -->
             <div v-if="activeTab === 'spec'" class="tab-pane spec-pane">
               <div class="spec-image">
-                <img src="/img/specification.4bd5d369.png" alt="產品規格" class="specification-img"
+                <img :src="specificationImg" alt="產品規格" class="specification-img"
                   @error="handleImageError" />
               </div>
             </div>
@@ -167,6 +167,10 @@ import { useCart } from '../../composable/useCart'
 import { showToast } from '../../composable/useToast'
 import ServiceCard from '../../components/ServiceCard.vue'
 import LoadingOverlay from '../../components/backstage/LoadingOverlay.vue';
+
+// 使用 import 導入靜態圖片
+import defaultBlockImg from '/img/defaultblock.731a071a.jpg'
+import specificationImg from '/img/specification.4bd5d369.png'
 
 const route = useRoute()
 const router = useRouter()

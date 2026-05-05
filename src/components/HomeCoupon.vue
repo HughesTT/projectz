@@ -1,5 +1,5 @@
 <template>
-  <div class="homecoupon">
+  <div class="homecoupon" :style="{ backgroundImage: `url(${couponBg})` }">
     <div class="homecoupon-box">
       <div class="homecoupon-text">母親節優惠碼</div>
       <div class="homecoupon-code">
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="homecoupon-mobi">
-    <div class="homecoupon-box">
+    <div class="homecoupon-box" :style="{ backgroundImage: `url(${mobiCouponBg})` }">
       <div class="homecoupon-text">母親節優惠碼</div>
       <div class="homecoupon-code">
         ILOVEMOM
@@ -33,6 +33,10 @@
 
 <script setup>
 import { ref } from 'vue'
+
+// 使用 import 導入背景圖片
+import couponBg from '/img/couponbg.9e205a49.png'
+import mobiCouponBg from '/img/mobi_couponcode.a75e193e.png'
 
 const copycheck = ref(false)
 
@@ -63,7 +67,6 @@ $secondary-color: #a855f7;
   padding: 1rem;
   padding-left: 22rem;
   position: relative;
-  background-image: url('/img/couponbg.9e205a49.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -202,7 +205,6 @@ $secondary-color: #a855f7;
 
   .homecoupon-box {
     width: 100%;
-    background-image: url('/img/mobi_couponcode.a75e193e.png');
     background-size: cover;
     background-position: left center;
     padding: 13rem 1.5rem 0 1.5rem; // 增加底部內距

@@ -3,7 +3,7 @@
     <div class="navbar-container">
       <!-- Logo -->
       <router-link to="/" class="navbar-logo">
-        <img src="/img/logo.2dcc836c.png" alt="Logo" class="logo-img">
+        <img :src="logo" alt="Logo" class="logo-img">
       </router-link>
 
       <!-- 產品分類 (桌面版) -->
@@ -113,6 +113,7 @@ import { useRouter } from 'vue-router'
 import { useMemberAuth } from '../composable/useMemberAuth'
 import { useCart } from '../composable/useCart'
 import { useToast } from '../composable/useToast'
+import logo from '/img/logo.2dcc836c.png'
 
 const router = useRouter()
 const { currentUser, isAuthenticated, logout, checkAuth } = useMemberAuth()

@@ -16,14 +16,14 @@
         </div>
         <div class="bluetooth-image">
           <div class="image-gradient-overlay"></div>
-          <img src="/img/homesection.47b336b0.png" alt="無線耳機">
+          <img :src="homesectionImg" alt="無線耳機">
         </div>
       </div>
     </section>
 
     <!-- 降噪區塊 -->
     <section class="noise-section">
-      <div class="section-bg" style="background-image: url('/img/noisecanceling_bg.253f34d3.jpg')">
+      <div class="section-bg" :style="{ backgroundImage: `url(${noisecancelingBg})` }">
         <div class="content-overlay">
           <div class="content-box">
             <h2 class="title-gradient">全面提升聆聽體驗</h2>
@@ -40,7 +40,7 @@
 
     <!-- 電競區塊 -->
     <section class="gaming-section">
-      <div class="section-bg" style="background-image: url('/img/gaming.719061ea.jpg')">
+      <div class="section-bg" :style="{ backgroundImage: `url(${gamingBg})` }">
         <div class="content-overlay content-overlay-right">
           <div class="content-box">
             <h2 class="title-gradient">超長續航 遊戲不斷</h2>
@@ -59,6 +59,12 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+
+// 使用 import 導入圖片
+import homesectionImg from '/img/homesection.47b336b0.png'
+import noisecancelingBg from '/img/noisecanceling_bg.253f34d3.jpg'
+import gamingBg from '/img/gaming.719061ea.jpg'
+
 const router = useRouter()
 const toCategory = (category) => {
   router.push('/products/headphone')

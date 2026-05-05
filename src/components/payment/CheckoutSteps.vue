@@ -1,9 +1,21 @@
+<script setup>
+import logo from '/img/logo.2dcc836c.png'
+
+defineProps({
+  currentStep: {
+    type: Number,
+    required: true,
+    default: 1
+  }
+})
+</script>
+
 <template>
   <div class="checkout-steps-wrapper">
     <!-- Logo 和回首頁連結 -->
     <div class="checkout-header">
       <router-link to="/" class="logo-link">
-        <img src="/img/logo.2dcc836c.png" alt="網站 Logo" class="site-logo">
+        <img :src="logo" alt="網站 Logo" class="site-logo">
       </router-link>
     </div>
 
@@ -33,16 +45,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-defineProps({
-  currentStep: {
-    type: Number,
-    required: true,
-    default: 1
-  }
-})
-</script>
 
 <style lang="scss" scoped>
 $primary-color: #7030a0;

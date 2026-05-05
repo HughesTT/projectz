@@ -5,7 +5,7 @@
       <div class="brand-content">
         <router-link to="/" class="brand-logo-link">
           <div class="brand-logo">
-            <img src="/img/logo.2dcc836c.png" alt="Logo">
+            <img :src="logo" alt="Logo">
           </div>
         </router-link>
         <h1 class="brand-title">Join Us</h1>
@@ -44,6 +44,7 @@
 
 <script setup>
 import RegisterForm from '../components/member/RegisterForm.vue'
+import logo from '/img/logo.2dcc836c.png'
 </script>
 
 <style lang="scss" scoped>

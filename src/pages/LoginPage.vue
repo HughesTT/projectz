@@ -5,7 +5,7 @@
       <div class="brand-content">
         <router-link to="/" class="brand-logo-link">
           <div class="brand-logo">
-            <img src="/img/logo.2dcc836c.png" alt="Logo">
+            <img :src="logo" alt="Logo">
           </div>
         </router-link>
         <h1 class="brand-title">Welcome</h1>
@@ -46,6 +46,7 @@
 <script setup>
 import LoginForm from '../components/member/LoginForm.vue'
 import ToastPage from '../components/backstage/ToastPage.vue'
+import logo from '/img/logo.2dcc836c.png'
 </script>
 
 <style lang="scss" scoped>
