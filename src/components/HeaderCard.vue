@@ -13,16 +13,20 @@
   </div>
 </template>
 <script setup>
+// 使用 import 導入圖片，讓 Vite 正確處理路徑
+import headercard1 from '/img/headercard/headercard1.png'
+import headercard2 from '/img/headercard/headercard2.png'
+
 const headerCardImgs = [
   {
     id: 0,
-    src: '/img/headercard/headercard1.png',
+    src: headercard1,
     text: '限時折扣',
     link: '/products/-OMLz1SRWqZBwVKngzGA',
   },
   {
     id: 1,
-    src: '/img/headercard/headercard2.png',
+    src: headercard2,
     text: '新品上市',
     link: '/products/-Oqyu0xi4ru6-AuIgfqz',
   },

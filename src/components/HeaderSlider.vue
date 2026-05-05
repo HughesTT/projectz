@@ -28,32 +28,42 @@
 <script setup>
 import router from '../router';
 
+// 使用 import 導入圖片，讓 Vite 正確處理路徑
+import banner1 from '/img/headerbanner01.e030209c.jpg'
+import banner2 from '/img/headerbanner02.79562a15.jpg'
+import banner3 from '/img/headerbanner03.a7c8bb9a.jpg'
+import banner4 from '/img/headerbanner04.c0e2c68a.jpg'
+import mobiBanner1 from '/img/mobibanner-1.f88d0c1b.jpg'
+import mobiBanner2 from '/img/mobibanner-2.27962580.jpg'
+import mobiBanner3 from '/img/mobibanner-3.21b3a764.jpg'
+import mobiBanner4 from '/img/mobibanner-4.42a9ce71.jpg'
+
 const imgItems = [
   {
     id: 0,
-    src: '/img/headerbanner01.e030209c.jpg',
-    mobileSrc: '/img/mobibanner-2.27962580.jpg',
+    src: banner1,
+    mobileSrc: mobiBanner2,
     link: '/products/-OMLz1SRWqZBwVKngzGA',
     title: 'RS 60 PLUS'
   },
   {
     id: 1,
-    src: '/img/headerbanner02.79562a15.jpg',
-    mobileSrc: '/img/mobibanner-1.f88d0c1b.jpg',
+    src: banner2,
+    mobileSrc: mobiBanner1,
     link: '/products/-ONJMpek8GaaL3jwYTeG',
     title: 'HQ 990 PRO PLUS'
   },
   {
     id: 2,
-    src: '/img/headerbanner03.a7c8bb9a.jpg',
-    mobileSrc: '/img/mobibanner-3.21b3a764.jpg',
+    src: banner3,
+    mobileSrc: mobiBanner3,
     link: '/products/-ONOT2norCR4vTU_J0t7',
     title: 'HA 30 PRO'
   },
   {
     id: 3,
-    src: '/img/headerbanner04.c0e2c68a.jpg',
-    mobileSrc: '/img/mobibanner-4.42a9ce71.jpg',
+    src: banner4,
+    mobileSrc: mobiBanner4,
     link: '/products/-ONOoCZ8szRMi3HMrAqj',
     title: 'TRUE VOICE'
   }
