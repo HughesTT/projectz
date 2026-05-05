@@ -104,8 +104,7 @@
               <div class="intro-row">
                 <div class="intro-col intro-col-left">
                   <div class="image-wrapper">
-                    <img :src="defaultBlockImg" alt="產品展示" class="product-detail-img"
-                      @error="handleImageError" />
+                    <img :src="defaultBlockImg" alt="產品展示" class="product-detail-img" @error="handleImageError" />
                   </div>
                 </div>
                 <div class="intro-col intro-col-right">
@@ -119,8 +118,7 @@
             <!-- 規格頁籤 -->
             <div v-if="activeTab === 'spec'" class="tab-pane spec-pane">
               <div class="spec-image">
-                <img :src="specificationImg" alt="產品規格" class="specification-img"
-                  @error="handleImageError" />
+                <img :src="specificationImg" alt="產品規格" class="specification-img" @error="handleImageError" />
               </div>
             </div>
           </div>
