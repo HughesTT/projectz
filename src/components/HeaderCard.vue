@@ -16,13 +16,13 @@
 const headerCardImgs = [
   {
     id: 0,
-    src: '../../public/img/headercard/headercard1.png',
+    src: '/img/headercard/headercard1.png',
     text: '限時折扣',
     link: '/products/-OMLz1SRWqZBwVKngzGA',
   },
   {
     id: 1,
-    src: '../../public/img/headercard/headercard2.png',
+    src: '/img/headercard/headercard2.png',
     text: '新品上市',
     link: '/products/-Oqyu0xi4ru6-AuIgfqz',
   },

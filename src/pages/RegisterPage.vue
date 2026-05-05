@@ -5,7 +5,7 @@
       <div class="brand-content">
         <router-link to="/" class="brand-logo-link">
           <div class="brand-logo">
-            <img src="../../public/img/logo.2dcc836c.png" alt="Logo">
+            <img src="/img/logo.2dcc836c.png" alt="Logo">
           </div>
         </router-link>
         <h1 class="brand-title">Join Us</h1>

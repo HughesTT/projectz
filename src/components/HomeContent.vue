@@ -16,14 +16,14 @@
         </div>
         <div class="bluetooth-image">
           <div class="image-gradient-overlay"></div>
-          <img src="../../public/img/homesection.47b336b0.png" alt="無線耳機">
+          <img src="/img/homesection.47b336b0.png" alt="無線耳機">
         </div>
       </div>
     </section>
 
     <!-- 降噪區塊 -->
     <section class="noise-section">
-      <div class="section-bg" style="background-image: url('../../public/img/noisecanceling_bg.253f34d3.jpg')">
+      <div class="section-bg" style="background-image: url('/img/noisecanceling_bg.253f34d3.jpg')">
         <div class="content-overlay">
           <div class="content-box">
             <h2 class="title-gradient">全面提升聆聽體驗</h2>
@@ -40,7 +40,7 @@
 
     <!-- 電競區塊 -->
     <section class="gaming-section">
-      <div class="section-bg" style="background-image: url('../../public/img/gaming.719061ea.jpg')">
+      <div class="section-bg" style="background-image: url('/img/gaming.719061ea.jpg')">
         <div class="content-overlay content-overlay-right">
           <div class="content-box">
             <h2 class="title-gradient">超長續航 遊戲不斷</h2>

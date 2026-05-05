@@ -1,10 +1,10 @@
-# ProjectZ - 電子產品電商平台 🎧
+# ProjectZ - 電商平台 🎧
 
-一個使用 Vue 3 + Vite 開發的現代化電子產品電商平台，提供耳機、揚聲器、電視等產品的線上購物體驗。
+使用 Vue 3 + Vite 開發的電商平台，提供耳機、揚聲器、電視等產品的線上購物體驗。
 
 ## 🌐 線上預覽
 
-- **GitHub Pages**: https://huguestt.github.io/projectz/
+- **GitHub Pages**: https://hughestt.github.io/projectz/#/
 - **Repository**: https://github.com/HughesTT/projectz
 
 ---
@@ -22,14 +22,14 @@
 - 📋 **訂單管理**: 訂單查詢與狀態追蹤
 
 ### 後台管理
-- 📊 **儀表板**: 數據統計與概覽
+- 📊 **後台主頁面**: 數據統計與概覽
 - 🎁 **產品管理**: 新增、編輯、刪除產品
 - 📝 **訂單管理**: 訂單狀態更新
 - 🎫 **優惠券管理**: 折扣碼設定
 
 ---
 
-## 🛠️ 技術棧
+## 🛠️ 使用技術
 
 ### 核心框架
 - **Vue 3**: Composition API with `<script setup>`
@@ -111,9 +111,9 @@ projectz/
 ├── src/
 │   ├── api/                   # API 請求
 │   ├── assets/                # 資源文件
-│   ├── components/            # Vue 組件
-│   │   ├── backstage/         # 後台組件
-│   │   └── ...               # 前台組件
+│   ├── components/            # Vue 元件
+│   │   ├── backstage/         # 後台元件
+│   │   └── ...               # 前台元件
 │   ├── composable/            # 可組合函數
 │   │   ├── useAuth.js        # 驗證邏輯
 │   │   ├── useCart.js        # 購物車邏輯
@@ -121,7 +121,7 @@ projectz/
 │   │   └── useToast.js       # 提示訊息
 │   ├── config/                # 配置文件
 │   │   └── routeConfig.js    # 路由配置
-│   ├── pages/                 # 頁面組件
+│   ├── pages/                 # 頁面元件
 │   │   ├── products/          # 產品相關頁面
 │   │   ├── member/            # 會員相關頁面
 │   │   └── backstage/         # 後台管理頁面
@@ -131,11 +131,11 @@ projectz/
 │   │   ├── productStore.js   # 產品狀態
 │   │   ├── orderStore.js     # 訂單狀態
 │   │   └── statusStore.js    # 全域狀態
-│   ├── App.vue               # 根組件
+│   ├── App.vue               # 根元件
 │   ├── main.js               # 入口文件
 │   └── style.css             # 全域樣式
 ├── deploy.ps1                # 部署腳本
-├── DEPLOYMENT.md             # 部署文檔
+├── DEPLOYMENT.md             # 部署文件
 ├── vite.config.js           # Vite 配置
 └── package.json             # 專案配置
 ```
@@ -164,7 +164,7 @@ feat: 新增功能
 fix: 修復問題
 style: 樣式調整
 refactor: 重構代碼
-docs: 文檔更新
+docs: 文件更新
 perf: 性能優化
 ```
 
@@ -176,10 +176,10 @@ perf: 性能優化
 
 ---
 
-## 📄 相關文檔
+## 📄 相關文件
 
 - [部署指南](./DEPLOYMENT.md) - GitHub Pages 部署說明
-- [重構指南](./REFACTORING_GUIDE.md) - 代碼重構文檔
+- [重構指南](./REFACTORING_GUIDE.md) - 代碼重構文件
 - [路由配置指南](./docs/ROUTE_CONFIG_GUIDE.md) - 路由配置說明
 
 ---

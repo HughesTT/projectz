@@ -107,16 +107,16 @@ npm run preview
 feat: 新增功能
 fix: 修復問題
 style: 樣式調整
-refactor: 重構代碼
-docs: 文檔更新
-perf: 性能優化
+refactor: 代碼重構
+docs: 文件更新
+perf: 性能最佳化
 test: 測試相關
 chore: 其他雜項
 ```
 
 範例：
 ```powershell
-git commit -m "feat: 新增產品詳細頁面滾動優化"
+git commit -m "feat: 新增產品詳細頁面滾動最佳化"
 git commit -m "fix: 修正行動裝置滾動問題"
 ```
 
@@ -142,6 +142,6 @@ git commit -m "fix: 修正行動裝置滾動問題"
 ## 📞 技術支援
 
 如有問題，請查看：
-- [Vite 部署文檔](https://vitejs.dev/guide/static-deploy.html)
-- [GitHub Pages 文檔](https://docs.github.com/en/pages)
-- [GitHub Actions 文檔](https://docs.github.com/en/actions)
+- [Vite 部署文件](https://vitejs.dev/guide/static-deploy.html)
+- [GitHub Pages 文件](https://docs.github.com/en/pages)
+- [GitHub Actions 文件](https://docs.github.com/en/actions)

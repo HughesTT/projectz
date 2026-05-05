@@ -3,7 +3,7 @@
     <div class="navbar-container">
       <!-- Logo -->
       <router-link to="/" class="navbar-logo">
-        <img src="../../public/img/logo.2dcc836c.png" alt="Logo" class="logo-img">
+        <img src="/img/logo.2dcc836c.png" alt="Logo" class="logo-img">
       </router-link>
 
       <!-- 產品分類 (桌面版) -->

@@ -31,29 +31,29 @@ import router from '../router';
 const imgItems = [
   {
     id: 0,
-    src: './../../public/img/headerbanner01.e030209c.jpg',
-    mobileSrc: './../../public/img/mobibanner-2.27962580.jpg',
+    src: '/img/headerbanner01.e030209c.jpg',
+    mobileSrc: '/img/mobibanner-2.27962580.jpg',
     link: '/products/-OMLz1SRWqZBwVKngzGA',
     title: 'RS 60 PLUS'
   },
   {
     id: 1,
-    src: './../../public/img/headerbanner02.79562a15.jpg',
-    mobileSrc: './../../public/img/mobibanner-1.f88d0c1b.jpg',
+    src: '/img/headerbanner02.79562a15.jpg',
+    mobileSrc: '/img/mobibanner-1.f88d0c1b.jpg',
     link: '/products/-ONJMpek8GaaL3jwYTeG',
     title: 'HQ 990 PRO PLUS'
   },
   {
     id: 2,
-    src: './../../public/img/headerbanner03.a7c8bb9a.jpg',
-    mobileSrc: './../../public/img/mobibanner-3.21b3a764.jpg',
+    src: '/img/headerbanner03.a7c8bb9a.jpg',
+    mobileSrc: '/img/mobibanner-3.21b3a764.jpg',
     link: '/products/-ONOT2norCR4vTU_J0t7',
     title: 'HA 30 PRO'
   },
   {
     id: 3,
-    src: './../../public/img/headerbanner04.c0e2c68a.jpg',
-    mobileSrc: './../../public/img/mobibanner-4.42a9ce71.jpg',
+    src: '/img/headerbanner04.c0e2c68a.jpg',
+    mobileSrc: '/img/mobibanner-4.42a9ce71.jpg',
     link: '/products/-ONOoCZ8szRMi3HMrAqj',
     title: 'TRUE VOICE'
   }
