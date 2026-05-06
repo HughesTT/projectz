@@ -41,12 +41,13 @@ const emit = defineEmits(['submit']) // 只需要 submit 事件
 
 <style lang="scss" scoped>
 .container {
-  width: 100%;
+  width: 40%;
   max-width: 100%;
   box-sizing: border-box;
   padding: 1rem;
 
   @media (max-width: 768px) {
+    width: 100%;
     padding: 0.75rem;
   }
 
