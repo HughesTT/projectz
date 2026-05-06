@@ -39,7 +39,7 @@ defineProps({
 const emit = defineEmits(['submit']) // 只需要 submit 事件
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .container {
   width: 100%;
   max-width: 100%;
