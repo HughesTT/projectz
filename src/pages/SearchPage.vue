@@ -42,7 +42,7 @@
               <p class="product-price">NT$ {{ product.price?.toLocaleString() }}</p>
             </div>
             <button class="view-btn" @click="viewProduct(product.id)">
-              查看詳情
+              商品資訊
             </button>
           </li>
         </ul>
@@ -61,10 +61,10 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useProductStore } from '../../store/productStore'
-import { useStatusStore } from '../../store/statusStore'
-import LoadingOverlay from '../../components/backstage/LoadingOverlay.vue'
-import { showToast } from '../../composable/useToast'
+import { useProductStore } from '../store/productStore'
+import { useStatusStore } from '../store/statusStore'
+import LoadingOverlay from '../components/backstage/LoadingOverlay.vue'
+import { showToast } from '../composable/useToast'
 
 const route = useRoute()
 const router = useRouter()

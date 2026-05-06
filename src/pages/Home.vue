@@ -13,15 +13,17 @@ import { onMounted } from 'vue';
 const statusStore = useStatusStore()
 const { isLoading } = storeToRefs(statusStore)
 
-const homeLoading = () => {
-  isLoading.value = true
-  setTimeout(() => {
-    isLoading.value = false
-  }, 1000) // 模擬載入時間
-}
+// const homeLoading = () => {
+//   isLoading.value = true
+//   // 模擬載入時間
+//   setTimeout(() => {
+//     isLoading.value = false
+//   }, 1000)
+// }
 
 onMounted(() => {
-  homeLoading()
+  window.scrollTo(0, 0) // 確保頁面載入時從頂部開始
+  // homeLoading()
 })
 </script>
 

@@ -81,7 +81,7 @@ const routes = [
       {
         path: '/result',
         name: '商品搜尋',
-        component: () => import('../pages/backstage/SearchPage.vue')
+        component: () => import('../pages/SearchPage.vue')
       }
     ]
   },

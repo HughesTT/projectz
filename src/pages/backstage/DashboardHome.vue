@@ -15,7 +15,7 @@
     <div class="quick-nav-section">
       <h2 class="section-title">
         <i class="bi bi-lightning-fill me-2"></i>
-        快速導航
+        快速導覽
       </h2>
       <div class="nav-cards">
         <router-link to="/dashboard/products" class="nav-card products">

@@ -1,6 +1,6 @@
 # ProjectZ - 電商平台
 
-使用 Vue 3 + Vite 開發的電商平台，提供耳機、揚聲器、電視等產品的線上購物體驗。
+使用 Vue 3 + Vite 開發的電商平台
 
 ## 🌐 線上預覽
 
@@ -32,19 +32,11 @@
 ## 🛠️ 使用技術
 
 ### 核心框架
-- **Vue 3**: Composition API
-- **Vite**: 快速的開發建置工具
-- **Vue Router**: 路由管理
-- **Pinia**: 狀態管理
+
+**Vue 3**、**Vite**、**Vue Router**、**Pinia**
 
 ### UI/UX
-- **SCSS**: 樣式預處理器
-- **Bootstrap Icons**: icon圖庫
-- **響應式設計**: 支援桌面、平板、手機
-
-### 部署
-- **GitHub Actions**: 自動化 CI/CD
-- **GitHub Pages**: 靜態網站託管
+**SCSS**、**響應式設計(RWD)**
 
 ---
 
@@ -63,13 +55,13 @@ projectz/
 │   ├── components/            # Vue 元件
 │   │   ├── backstage/         # 後台元件
 │   │   └── ...                # 前台元件
-│   ├── composable/            # 可組合函數
+│   ├── composable/            # 組合式邏輯函式
 │   │   ├── useAuth.js         # 驗證邏輯
 │   │   ├── useCart.js         # 購物車邏輯
 │   │   ├── useCoupon.js       # 優惠券邏輯
 │   │   └── useToast.js        # 提示訊息
-│   ├── config/                # 配置文件
-│   │   └── routeConfig.js     # 路由配置
+│   ├── config/                # 設定檔
+│   │   └── routeConfig.js     # 路由設定
 │   ├── pages/                 # 頁面元件
 │   │   ├── products/          # 產品相關頁面
 │   │   ├── member/            # 會員相關頁面

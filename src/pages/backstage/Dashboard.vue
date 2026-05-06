@@ -26,9 +26,9 @@ onMounted(() => {
   isLoading.value = true
 
   // 模擬讀取時間（實際使用時可以移除或根據需求調整）
-  setTimeout(() => {
-    isLoading.value = false
-  }, 1000)
+  // setTimeout(() => {
+  //   isLoading.value = false
+  // }, 1000)
 })
 </script>
 
