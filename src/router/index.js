@@ -145,15 +145,10 @@ const router = createRouter({
       }
     }
     
-    // 針對產品詳細頁面，使用立即滾動
+    // 針對產品詳細頁面，返回 null 讓元件自行處理畫面捲動
+    // 確保在資料載入完成後才捲動，避免被中斷
     if (to.name === 'ProductId') {
-      // 使用原始語法確保行動裝置相容性
-      setTimeout(() => {
-        window.scrollTo(0, 0)
-        if (document.documentElement) document.documentElement.scrollTop = 0
-        if (document.body) document.body.scrollTop = 0
-      }, 0)
-      return { top: 0, left: 0 }
+      return null
     }
     
     // 預設情況：滾動到頂部

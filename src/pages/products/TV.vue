@@ -17,11 +17,11 @@
                 <i class="bi bi-tv"></i>
                 全部商品
               </li>
-              <li :class="{ active: selectedCategory === 'OLED' }" @click="selectedCategory = 'OLED'">
+              <li :class="{ active: selectedCategory === 'led' }" @click="selectedCategory = 'led'">
                 <i class="bi bi-tv"></i>
-                OLED
+                LED
               </li>
-              <li :class="{ active: selectedCategory === 'QLED' }" @click="selectedCategory = 'QLED'">
+              <li :class="{ active: selectedCategory === 'qled' }" @click="selectedCategory = 'qled'">
                 <i class="bi bi-tv"></i>
                 QLED
               </li>

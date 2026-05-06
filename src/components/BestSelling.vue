@@ -15,7 +15,7 @@
               {{ item.title }}
             </div>
             <div class="product_price">
-              $ {{ item.price }}
+              $ {{ Number(item.price).toLocaleString() }}
             </div>
           </router-link>
         </div>

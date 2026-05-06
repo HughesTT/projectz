@@ -272,17 +272,8 @@ export const useProductStore = defineStore('productStore', () => {
 
   // 導向指定產品頁面
   const goToProduct = (productId) => {
-    // 先立即滾動到頂部（使用最可靠的原始語法）
-    window.scrollTo(0, 0)
-    
-    // 同時滾動 document 元素（行動裝置需要）
-    if (document.documentElement) {
-      document.documentElement.scrollTop = 0
-    }
-    if (document.body) {
-      document.body.scrollTop = 0
-    }
-    
+    // 直接導向，讓元件自行處理捲動
+    // 確保在資料載入完成後才觸發捲動
     router.push({ name: 'ProductId', params: { productId } })
   }
 

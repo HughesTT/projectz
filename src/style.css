@@ -1,13 +1,26 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
+/* 修正行動裝置畫面捲動問題 */
+html {
+  /* 禁用過度捲動和下拉觸發重新整理 */
+  overscroll-behavior: none;
+  /* 禁用 iOS Safari 的彈跳效果 */
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   font-family: 'Noto Sans TC', sans-serif;
   background-color: #fff !important;
+  /* 禁用過度捲動和下拉觸發重新整理 */
+  overscroll-behavior: none;
+  /* 確保 body 不會比 viewport 小 */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 /* ========================================
-   自定義 Bootstrap 主題色 - Purple
-   ======================================== */
+  自定義 Bootstrap 主題色 - Purple
+======================================== */
 
 /* Purple 主題色 */
 .bg-purple {

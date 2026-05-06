@@ -259,53 +259,85 @@ const handleImageError = (event) => {
 }
 
 const scrollToTop = () => {
-  // 多重備份機制確保行動裝置也能滾動
-  // 方法1: 原始語法（最可靠）
-  window.scrollTo(0, 0)
+  // 檢測是否為移動裝置
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
-  // 方法2: 同時滾動 document 元素（某些行動瀏覽器需要）
-  if (document.documentElement) {
-    document.documentElement.scrollTop = 0
+  // 強制滾動函數
+  const forceScroll = () => {
+    window.scrollTo(0, 0)
+    if (document.documentElement) document.documentElement.scrollTop = 0
+    if (document.body) document.body.scrollTop = 0
+
+    // 移動裝置額外處理：嘗試 scrollIntoView
+    if (isMobile && document.body) {
+      document.body.scrollIntoView({ block: 'start', inline: 'start' })
+    }
   }
-  if (document.body) {
-    document.body.scrollTop = 0
-  }
+
+  // 立即執行第一次
+  forceScroll()
+
+  // 使用 requestAnimationFrame 確保在瀏覽器重繪後執行
+  requestAnimationFrame(() => {
+    forceScroll()
+
+    requestAnimationFrame(() => {
+      forceScroll()
+
+      // 移動裝置需要更多次確保和更長延遲（等待地址欄穩定）
+      if (isMobile) {
+        const intervals = [50, 100, 150, 200, 300]
+        intervals.forEach(delay => {
+          setTimeout(forceScroll, delay)
+        })
+      } else {
+        // 桌面裝置只需一次延遲備份
+        setTimeout(forceScroll, 100)
+      }
+    })
+  })
 }
 
 // 監聽路由參數變化
 watch(() => route.params.productId, async (newId, oldId) => {
-  if (newId) {
-    // 立即滾動
-    scrollToTop()
+  if (newId && newId !== oldId) {
+    // 移動裝置：立即先滾動一次（在資料載入前）
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    if (isMobile) {
+      window.scrollTo(0, 0)
+      if (document.documentElement) document.documentElement.scrollTop = 0
+      if (document.body) document.body.scrollTop = 0
+    }
 
-    // 延遲備份滾動（等待 router 處理完成）
-    setTimeout(() => {
-      scrollToTop()
-    }, 0)
-
-    // 載入資料後再次確保位置
-    await nextTick()
+    // 載入資料
     await loadProduct()
 
-    // 最後再次滾動確保（針對資料載入後的佈局變化）
-    setTimeout(() => {
-      scrollToTop()
-    }, 50)
+    // 等待 DOM 更新完成
+    await nextTick()
+    await nextTick()
+
+    // 資料載入後再次滾動
+    scrollToTop()
   }
 })
 
 onMounted(async () => {
+  // 禁用瀏覽器的自動滾動恢復（這在移動裝置上尤其重要）
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual'
+  }
+
   getFavorite()
 
-  // 首次載入時也確保滾動到頂部
-  scrollToTop()
-
+  // 載入產品資料
   await loadProduct()
 
-  // 載入完成後再次確保位置
-  setTimeout(() => {
-    scrollToTop()
-  }, 50)
+  // 等待 DOM 完全更新
+  await nextTick()
+  await nextTick()
+
+  // 首次載入時確保滾動到頂部
+  scrollToTop()
 })
 </script>
 

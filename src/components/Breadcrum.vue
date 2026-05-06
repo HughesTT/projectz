@@ -137,7 +137,7 @@ $primary-color: #7030a0;
 $secondary-color: #a855f7;
 
 .breadcrumb-container {
-  width: 1400px;
+  width: 100%;
   margin: auto;
   background: white;
   border-radius: 12px;
@@ -202,7 +202,6 @@ $secondary-color: #a855f7;
 @media (max-width: 768px) {
   .breadcrumb-container {
     padding: 0.875rem 1.25rem;
-    margin-bottom: 1rem;
   }
 
   .breadcrumb {

@@ -58,12 +58,23 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
 
 .profile-page {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .page-header {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
   border-bottom: 2px solid #e2e8f0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
 }
 
 .page-title {
@@ -74,9 +85,23 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   align-items: center;
   gap: 0.75rem;
   margin: 0 0 0.5rem 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
 
   i {
     color: $primary-color;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1.25rem;
   }
 }
 
@@ -84,12 +109,27 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   color: #718096;
   font-size: 0.95rem;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
 }
 
 .profile-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 576px) {
+    gap: 1rem;
+  }
 }
 
 .info-card {
@@ -98,9 +138,22 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 
   &:hover {
     box-shadow: 0 4px 16px rgba(112, 48, 160, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 1.25rem;
   }
 }
 
@@ -114,6 +167,23 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.875rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
 }
 
 .user-rank {
@@ -127,12 +197,32 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
   font-weight: 600;
   border-radius: 20px;
   box-shadow: 0 2px 8px rgba(112, 48, 160, 0.25);
+
+  @media (max-width: 768px) {
+    padding: 0.3rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 576px) {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
 }
 
 .info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 992px) {
+    gap: 1.25rem;
+  }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -141,6 +231,11 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
 }
 
 .info-item {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
   label {
     display: block;
     font-size: 0.875rem;
@@ -149,6 +244,17 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    overflow-wrap: break-word;
+
+    @media (max-width: 768px) {
+      font-size: 0.8125rem;
+      margin-bottom: 0.375rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 0.75rem;
+      letter-spacing: 0.3px;
+    }
   }
 
   .info-value {
@@ -160,10 +266,24 @@ $gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
     border-radius: 8px;
     border: 2px solid #e2e8f0;
     transition: all 0.3s ease;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+    box-sizing: border-box;
 
     &:hover {
       border-color: $primary-color;
       background: white;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.9375rem;
+      padding: 0.75rem 0.875rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 0.875rem;
+      padding: 0.625rem 0.75rem;
     }
   }
 }

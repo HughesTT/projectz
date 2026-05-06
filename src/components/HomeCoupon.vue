@@ -108,6 +108,10 @@ $secondary-color: #a855f7;
     right: -50px;
     z-index: 2;
     animation: pulse 3s ease-in-out infinite;
+
+    @media (max-width: 1200px) {
+      display: none; // 中小螢幕隱藏裝飾圓點
+    }
   }
 }
 

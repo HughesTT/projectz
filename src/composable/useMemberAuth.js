@@ -107,7 +107,7 @@ export function useMemberAuth() {
         // 模擬顯示的會員資料
         const mockUser = {
           id: 1,
-          name: 'Admin',
+          name: 'User',
           rank: '黃金會員',
           email: credentials.email,
           phone: '0912345678',
