@@ -142,11 +142,21 @@ const handleSubmit = async () => {
 <style lang="scss" scoped>
 .login-form-wrapper {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .form-header {
   text-align: center;
   margin-bottom: 2.5rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 576px) {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .form-title {
@@ -154,11 +164,27 @@ const handleSubmit = async () => {
   font-weight: 700;
   color: #2d3748;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+  }
 }
 
 .form-subtitle {
   color: #718096;
   font-size: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.9375rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.875rem;
+  }
 }
 
 /* 表單樣式 */
@@ -166,12 +192,24 @@ const handleSubmit = async () => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 576px) {
+    gap: 1rem;
+  }
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  @media (max-width: 576px) {
+    gap: 0.375rem;
+  }
 }
 
 .form-label {
@@ -184,11 +222,23 @@ const handleSubmit = async () => {
 
   i {
     color: #7030a0;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.875rem;
+    gap: 0.375rem;
   }
 }
 
 .form-input {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 0.875rem 1rem;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
@@ -206,6 +256,18 @@ const handleSubmit = async () => {
   &::placeholder {
     color: #a0aec0;
   }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9375rem;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 8px;
+  }
 }
 
 .password-input-wrapper {
@@ -213,6 +275,10 @@ const handleSubmit = async () => {
 
   .form-input {
     padding-right: 3rem;
+
+    @media (max-width: 576px) {
+      padding-right: 2.75rem;
+    }
   }
 
   .password-toggle {
@@ -233,6 +299,18 @@ const handleSubmit = async () => {
       color: #7030a0;
       background: rgba(112, 48, 160, 0.1);
     }
+
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+      padding: 0.4rem;
+      right: 0.625rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 1rem;
+      padding: 0.375rem;
+      right: 0.5rem;
+    }
   }
 }
 
@@ -242,6 +320,12 @@ const handleSubmit = async () => {
   justify-content: space-between;
   align-items: center;
   margin-top: -0.5rem;
+  gap: 0.5rem;
+
+  @media (max-width: 576px) {
+    flex-wrap: wrap;
+    margin-top: -0.25rem;
+  }
 }
 
 .checkbox-label {
@@ -262,6 +346,7 @@ const handleSubmit = async () => {
     border-radius: 6px;
     position: relative;
     transition: all 0.3s ease;
+    flex-shrink: 0;
 
     &::after {
       content: '';
@@ -275,6 +360,18 @@ const handleSubmit = async () => {
       transform: rotate(45deg);
       opacity: 0;
       transition: opacity 0.3s ease;
+    }
+
+    @media (max-width: 576px) {
+      width: 18px;
+      height: 18px;
+
+      &::after {
+        top: 1px;
+        left: 5px;
+        width: 4px;
+        height: 9px;
+      }
     }
   }
 
@@ -290,6 +387,14 @@ const handleSubmit = async () => {
   .checkbox-text {
     font-size: 0.9rem;
     color: #4a5568;
+
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 0.8125rem;
+    }
   }
 }
 
@@ -299,16 +404,27 @@ const handleSubmit = async () => {
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
+  white-space: nowrap;
 
   &:hover {
     color: #5a2580;
     text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.8125rem;
   }
 }
 
 /* 登入按鈕 */
 .submit-btn {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 1rem;
   background: linear-gradient(135deg, #7030a0, #a855f7);
   color: white;
@@ -333,6 +449,19 @@ const handleSubmit = async () => {
     opacity: 0.7;
     cursor: not-allowed;
   }
+
+  @media (max-width: 768px) {
+    padding: 0.875rem;
+    font-size: 1.05rem;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin-top: 0.25rem;
+  }
 }
 
 .loading-spinner {
@@ -343,6 +472,10 @@ const handleSubmit = async () => {
 
   i {
     font-size: 1.2rem;
+
+    @media (max-width: 576px) {
+      font-size: 1.1rem;
+    }
   }
 }
 
@@ -364,6 +497,16 @@ const handleSubmit = async () => {
   span {
     padding: 0 1rem;
     font-size: 0.9rem;
+    flex-shrink: 0;
+
+    @media (max-width: 576px) {
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    margin: 0.75rem 0;
   }
 }
 
@@ -372,6 +515,10 @@ const handleSubmit = async () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+
+  @media (max-width: 576px) {
+    gap: 0.75rem;
+  }
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
@@ -391,9 +538,23 @@ const handleSubmit = async () => {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 
   i {
     font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  span {
+    @media (max-width: 768px) {
+      font-size: 0.9375rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 0.875rem;
+    }
   }
 
   &:hover {
@@ -416,6 +577,24 @@ const handleSubmit = async () => {
       color: #1877f2;
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 0.875rem;
+    border-radius: 10px;
+
+    i {
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 0.625rem 0.75rem;
+    border-radius: 8px;
+
+    i {
+      font-size: 1rem;
+    }
+  }
 }
 
 /* 註冊連結 */
@@ -434,6 +613,14 @@ const handleSubmit = async () => {
       text-decoration: underline;
     }
   }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.875rem;
+  }
 }
 
 /* 動畫 */
@@ -449,5 +636,10 @@ const handleSubmit = async () => {
 
 .spin {
   animation: spin 1s linear infinite;
+}
+
+/* 防止元素溢出 */
+* {
+  box-sizing: border-box;
 }
 </style>
