@@ -61,12 +61,12 @@ projectz/
 │   │   ├── useCoupon.js       # 優惠券邏輯
 │   │   └── useToast.js        # 提示訊息
 │   ├── config/                # 設定檔
-│   │   └── routeConfig.js     # 路由設定
+│   │   └── routeConfig.js     # 導覽列新增維護、會員中心其他項目麵包屑路由
 │   ├── pages/                 # 頁面元件
-│   │   ├── products/          # 產品相關頁面
-│   │   ├── member/            # 會員相關頁面
+│   │   ├── products/          # 產品資訊頁面
+│   │   ├── member/            # 會員資訊頁面
 │   │   └── backstage/         # 後台管理頁面
-│   ├── router/                # 路由配置
+│   ├── router/                # 專案頁面路由設定
 │   │   └── index.js
 │   ├── store/                 # Pinia 狀態管理
 │   │   ├── productStore.js    # 產品狀態

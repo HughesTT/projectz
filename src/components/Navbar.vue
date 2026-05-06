@@ -10,7 +10,6 @@
       <div class="navbar-links">
         <router-link v-for="item in productCategories" :key="item.name" :to="item.link" class="nav-link"
           active-class="active">
-          <i :class="item.icon"></i>
           <span>{{ item.name }}</span>
         </router-link>
       </div>
@@ -40,7 +39,8 @@
           </button>
           <!-- 使用 Teleport 將選單渲染到 body -->
           <Teleport to="body">
-            <div v-if="showMemberMenu" class="member-dropdown-menu" @click.stop>
+            <div v-if="showMemberMenu" class="member-dropdown-menu"
+              :style="{ top: menuPosition.top + 'px', right: menuPosition.right + 'px' }" @click.stop>
               <router-link to="/member/profile" class="dropdown-item" @click="closeMemberMenu">
                 <i class="bi bi-person"></i>
                 <span>會員資料</span>
@@ -80,7 +80,6 @@
             <h3 class="mobile-section-title">產品分類</h3>
             <router-link v-for="item in productCategories" :key="item.name" :to="item.link" class="mobile-link"
               @click="closeMobileMenu">
-              <i :class="item.icon"></i>
               <span>{{ item.name }}</span>
             </router-link>
           </div>
@@ -113,18 +112,12 @@ import { useRouter } from 'vue-router'
 import { useMemberAuth } from '../composable/useMemberAuth'
 import { useCart } from '../composable/useCart'
 import { useToast } from '../composable/useToast'
+import { productCategories } from '../config/routeConfig'
 import logo from '/img/logo.2dcc836c.png'
 
 const router = useRouter()
 const { currentUser, isAuthenticated, logout, checkAuth } = useMemberAuth()
 const { showToast } = useToast()
-
-// 產品分類
-const productCategories = ref([
-  { name: '耳機', link: '/products/headphone', icon: 'bi bi-headphones' },
-  { name: '揚聲器', link: '/products/speaker', icon: 'bi bi-speaker' },
-  { name: '電視', link: '/products/tv', icon: 'bi bi-tv' },
-])
 
 // 搜尋功能
 const searchQuery = ref('')
@@ -163,9 +156,22 @@ getCart()
 
 // 會員功能
 const showMemberMenu = ref(false)
+const menuPosition = ref({ top: 0, right: 0 })
 
-const toggleMemberMenu = () => {
+const toggleMemberMenu = (event) => {
   showMemberMenu.value = !showMemberMenu.value
+
+  if (showMemberMenu.value) {
+    // 計算會員按鈕的位置
+    const button = event.currentTarget
+    const rect = button.getBoundingClientRect()
+
+    // 計算選單應該顯示的位置（按鈕下方，靠右對齊）
+    menuPosition.value = {
+      top: rect.bottom + 8, // 按鈕底部 + 8px 間距
+      right: window.innerWidth - rect.right - 20 // 從右邊對齊
+    }
+  }
 }
 
 const closeMemberMenu = () => {
@@ -616,8 +622,6 @@ onUnmounted(() => {
 
 .member-dropdown-menu {
   position: fixed;
-  top: 60px;
-  right: 20px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);

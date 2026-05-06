@@ -26,109 +26,43 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useProductStore } from '../store/productStore';
-import {
-  getCategoryInfoFromProduct,
-  getMemberPageInfo,
-  isProductListPage,
-  isMemberPage,
-  productCategories
-} from '../config/routeConfig';
 
 const route = useRoute();
 const productStore = useProductStore();
 const breadcrumbs = ref([]);
 
-// 生成麵包屑邏輯
-const generateBreadcrumbs = () => {
-  const crumbs = [];
-  const pathArray = route.path.split('/').filter(p => p);
+// 麵包屑生成邏輯
+const generateBreadcrumbs = async () => {
+  const meta = route.meta;
 
-  // 優先檢查路由的 meta.breadcrumb 配置
-  if (route.meta?.breadcrumb) {
-    // 如果路由有自定義麵包屑配置，直接使用
-    crumbs.push(...route.meta.breadcrumb);
+  // 生成 NavBar 既有項目的靜態麵包屑
+  if (meta?.breadcrumb) {
+    breadcrumbs.value = meta.breadcrumb;
+    return;
   }
-  // 判斷是否為產品詳情頁
-  else if (route.name === 'ProductId' && route.params.productId) {
-    // 從 productStore 獲取產品資料
-    const product = productStore.allProducts.find(p => p.id === route.params.productId);
 
-    if (product) {
-      // 使用配置文件的函數獲取分類信息
-      const categoryInfo = getCategoryInfoFromProduct(product);
-
-      if (categoryInfo) {
-        // 添加分類層級
-        crumbs.push({
-          name: categoryInfo.name,
-          path: categoryInfo.path
-        });
-
-        // 添加產品名稱（最後一層，不可點擊）
-        crumbs.push({
-          name: product.title || '產品詳情',
-          path: null
-        });
-      }
+  // index.js 個別產品的動態麵包屑生成函式
+  if (meta?.breadcrumbBuilder) {
+    try {
+      breadcrumbs.value = await meta.breadcrumbBuilder(route, productStore);
+    } catch (error) {
+      console.error('麵包屑生成失敗:', error);
+      breadcrumbs.value = [];
     }
-  }
-  // 判斷是否為產品列表頁（耳機/揚聲器/電視）
-  else if (pathArray.includes('products') && route.name && isProductListPage(route.name)) {
-    crumbs.push({
-      name: route.name,
-      path: null  // 目前頁面不可點擊
-    });
-  }
-  // 判斷是否為會員中心頁面
-  else if (pathArray.includes('member') && isMemberPage(route.name)) {
-    const memberPageInfo = getMemberPageInfo(route.name);
-
-    // 添加會員中心層級
-    crumbs.push({
-      name: '會員中心',
-      path: '/member'
-    });
-
-    // 添加子頁面
-    if (memberPageInfo) {
-      crumbs.push({
-        name: memberPageInfo.name,
-        path: null  // 目前頁面不可點擊
-      });
-    }
-  }
-  // 其他頁面
-  else if (route.name) {
-    crumbs.push({
-      name: route.name,
-      path: null
-    });
+    return;
   }
 
-  breadcrumbs.value = crumbs;
+  // index.js 沒有特別設定則不顯示麵包屑
+  breadcrumbs.value = [];
 };
 
 // 監聽路由變化
 watch(
-  () => [route.path, route.params.productId],
-  async () => {
-    // 如果是產品詳情頁且還沒載入產品資料
-    if (route.name === 'ProductId' && productStore.allProducts.length === 0) {
-      await productStore.getAllProducts();
-    }
+  () => [route.path, route.params],
+  () => {
     generateBreadcrumbs();
   },
   { immediate: true, deep: true }
-);
-
-// 監聽產品資料變化（確保資料載入後更新麵包屑）
-watch(
-  () => productStore.allProducts.length,
-  () => {
-    if (route.name === 'ProductId') {
-      generateBreadcrumbs();
-    }
-  }
 );
 </script>
 
@@ -137,7 +71,7 @@ $primary-color: #7030a0;
 $secondary-color: #a855f7;
 
 .breadcrumb-container {
-  width: 100%;
+  max-width: 1400px;
   margin: auto;
   background: white;
   border-radius: 12px;

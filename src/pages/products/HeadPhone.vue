@@ -114,7 +114,7 @@ const handleImageError = (event) => {
   event.target.src = 'https://via.placeholder.com/300x300?text=No+Image'
 }
 
-// 檢查是否需要顯示滾動指示器
+// backToTop圖示是否顯示
 const checkScroll = () => {
   if (categoryList.value) {
     const element = categoryList.value

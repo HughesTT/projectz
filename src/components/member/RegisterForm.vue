@@ -72,9 +72,9 @@
         <span class="checkbox-custom"></span>
         <span class="checkbox-text">
           我同意
-          <router-link class="link">服務條款</router-link>
+          <a class="link">服務條款</a>
           和
-          <router-link class="link">隱私政策</router-link>
+          <a class="link">隱私政策</a>
         </span>
       </label>
 

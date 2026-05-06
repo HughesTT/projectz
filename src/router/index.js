@@ -21,37 +21,67 @@ const routes = [
     path: '/member',
     name: 'Member',
     component: () => import('../pages/MemberPage.vue'),
-    meta: { requiresAuth: true },
+    meta: { 
+      requiresAuth: true,
+      breadcrumb: [{ name: '會員中心', path: '/member' }]
+    },
     redirect: '/member/profile',
     children: [
       {
         path: 'profile',
         name: 'MemberProfile',
         component: () => import('../pages/member/ProfilePage.vue'),
-        meta: { requiresAuth: true }
+        meta: { 
+          requiresAuth: true,
+          breadcrumb: [
+            { name: '會員中心', path: '/member' },
+            { name: '會員資料', path: null }
+          ]
+        }
       },
       {
         path: 'orders',
         name: 'MemberOrders',
         component: () => import('../pages/member/OrdersPage.vue'),
-        meta: { requiresAuth: true }
+        meta: { 
+          requiresAuth: true,
+          breadcrumb: [
+            { name: '會員中心', path: '/member' },
+            { name: '訂單記錄', path: null }
+          ]
+        }
       },
       {
         path: 'favorites',
         name: 'MemberFavorite',
-        component: () => import('../pages/member/FavoritePage.vue')
+        component: () => import('../pages/member/FavoritePage.vue'),
+        meta: {
+          breadcrumb: [
+            { name: '會員中心', path: '/member' },
+            { name: '追蹤清單', path: null }
+          ]
+        }
       },
       {
         path: 'cart',
         name: 'Cart',
-        component: () => import('../pages/member/Cart.vue')
+        component: () => import('../pages/member/Cart.vue'),
+        meta: {
+          breadcrumb: [
+            { name: '會員中心', path: '/member' },
+            { name: '購物車', path: null }
+          ]
+        }
       },
     ],
   },
   {
     path: '/payment',
     name: 'Payment',
-    component: () => import('../pages/Payment.vue')
+    component: () => import('../pages/Payment.vue'),
+    meta: {
+      breadcrumb: [{ name: '結帳', path: null }]
+    }
   },
   {
     path: '/products',
@@ -61,27 +91,71 @@ const routes = [
       {
         path: '/products/headphone',
         name: '耳機',
-        component: () => import('../pages/products/HeadPhone.vue')
+        component: () => import('../pages/products/HeadPhone.vue'),
+        meta: {
+          breadcrumb: [{ name: '耳機', path: null }]
+        }
       },
       {
         path: '/products/speaker',
         name: '揚聲器',
-        component: () => import('../pages/products/Speaker.vue')
+        component: () => import('../pages/products/Speaker.vue'),
+        meta: {
+          breadcrumb: [{ name: '揚聲器', path: null }]
+        }
       },
       {
         path: '/products/tv',
         name: '電視',
-        component: () => import('../pages/products/TV.vue')
+        component: () => import('../pages/products/TV.vue'),
+        meta: {
+          breadcrumb: [{ name: '電視', path: null }]
+        }
       },
       {
         path: ':productId',
         name: 'ProductId',
-        component: () => import('../pages/products/ProductMore.vue')
+        component: () => import('../pages/products/ProductMore.vue'),
+        meta: {
+          // 使用 breadcrumbBuilder 動態生成麵包屑
+          breadcrumbBuilder: async (route, productStore) => {
+            // 確認產品資料是否載入
+            if (productStore.allProducts.length === 0) {
+              await productStore.getAllProducts()
+            }
+
+            const product = productStore.allProducts.find(
+              p => p.id === route.params.productId
+            )
+
+            if (!product) {
+              return [{ name: '產品詳情', path: null }]
+            }
+
+            // 根據產品的 unit 或 category 決定分類
+            const categoryMap = {
+              'headphone': { name: '耳機', path: '/products/headphone' },
+              'speaker': { name: '揚聲器', path: '/products/speaker' },
+              'tv': { name: '電視', path: '/products/tv' }
+            }
+
+            const unit = product.unit?.toLowerCase()
+            const category = categoryMap[unit] || { name: '產品', path: '/products/headphone' }
+
+            return [
+              { name: category.name, path: category.path },
+              { name: product.title, path: null }
+            ]
+          }
+        }
       },
       {
         path: '/result',
         name: '商品搜尋',
-        component: () => import('../pages/SearchPage.vue')
+        component: () => import('../pages/SearchPage.vue'),
+        meta: {
+          breadcrumb: [{ name: '搜尋結果', path: null }]
+        }
       }
     ]
   },
