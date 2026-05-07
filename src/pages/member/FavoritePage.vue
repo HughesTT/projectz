@@ -27,6 +27,10 @@
                   <span class="price-label">NT$</span>
                   <span class="price-value">{{ favorite.price.toLocaleString() }}</span>
                 </div>
+                <button class="btn-add-cart" @click="addToCart(favorite)">
+                  <i class="bi bi-cart-plus"></i>
+                  <span>加入購物車</span>
+                </button>
                 <button class="remove-favorite-btn" @click="toggleFavorite(favorite)">
                   <i class="bi bi-trash"></i>
                   <span>移除</span>
@@ -45,19 +49,31 @@
 import { storeToRefs } from 'pinia'
 import { useStatusStore } from '../../store/statusStore.js'
 import { useFavorite } from '../../composable/useFavorite';
+import { useCart } from '../../composable/useCart.js'
 import { useRouter } from 'vue-router'
 import LoadingOverlay from '../../components/backstage/LoadingOverlay.vue';
+import { ref, onMounted } from 'vue';
 
 const router = useRouter()
 const statusStore = useStatusStore()
 const { isLoading } = storeToRefs(statusStore)
+const quantity = ref(1)
 
 // 使用 useFavorite composable
 const { favorites, toggleFavorite, getFavorite } = useFavorite()
 
+const { addToCart: addToCartAction } = useCart()
+
 // 圖片讀取錯誤處理
 const handleImageError = (event) => {
   event.target.src = 'https://via.placeholder.com/300x300?text=No+Image'
+}
+
+const addToCart = (favorite) => {
+  if (!favorite) return
+
+  addToCartAction(favorite, quantity.value)
+  quantity.value = 1 // 重置數量
 }
 
 // 在新分頁開啟產品頁面
@@ -71,6 +87,9 @@ getFavorite()
 </script>
 
 <style lang="scss" scoped>
+$primary-color: #7030a0;
+$gradient-primary: linear-gradient(135deg, #7030a0 0%, #a64ca6 100%);
+
 .profile-page {
   width: 100%;
 }
@@ -91,7 +110,7 @@ getFavorite()
   margin-bottom: 0.5rem;
 
   i {
-    color: #7030a0;
+    color: $primary-color;
   }
 }
 
@@ -218,6 +237,36 @@ getFavorite()
   gap: 1rem;
   padding: 1rem;
   border-top: 1px solid #e2e8f0;
+
+  .btn-add-cart,
+  .btn-favorite {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+
+    i {
+      font-size: 1.2rem;
+    }
+  }
+
+  .btn-add-cart {
+    background: $gradient-primary;
+    color: white;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(112, 48, 160, 0.35);
+    }
+  }
 }
 
 .favorite-price {

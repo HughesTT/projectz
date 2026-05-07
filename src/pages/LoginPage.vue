@@ -202,7 +202,7 @@ import logo from '/img/logo.2dcc836c.png'
 .form-section {
   flex: 1;
   display: flex;
-  align-items: center;
+  // align-items: center;
   justify-content: center;
   padding: 3rem 2rem;
 
