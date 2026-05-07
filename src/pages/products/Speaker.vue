@@ -104,7 +104,7 @@ const showScrollIndicator = ref(false) // 是否顯示滾動指示器
 
 // 圖片載入錯誤處理
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/300x300?text=No+Image'
+  event.target.src = '/img/default_img.png'
 }
 
 // 檢查是否需要顯示滾動指示器

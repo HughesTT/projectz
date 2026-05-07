@@ -255,7 +255,7 @@ const goToProduct = (productId) => {
 
 // 圖片錯誤處理
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/600x600?text=No+Image'
+  event.target.src = '/img/default_img.png'
 }
 
 const scrollToTop = () => {

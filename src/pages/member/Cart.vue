@@ -173,7 +173,7 @@ const openProductInNewTab = (productId) => {
 
 // 圖片載入錯誤處理
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/150x150?text=No+Image'
+  event.target.src = '/img/default_img.png'
 }
 </script>
 

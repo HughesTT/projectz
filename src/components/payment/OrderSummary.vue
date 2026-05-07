@@ -110,7 +110,7 @@ defineEmits(['checkout'])
 // )
 
 const handleImageError = (event) => {
-  event.target.src = 'https://via.placeholder.com/80x80?text=No+Image'
+  event.target.src = '/img/default_img.png'
 }
 </script>
 

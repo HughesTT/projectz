@@ -227,7 +227,7 @@ const truncateText = (text, maxlength) => {
 
 // 圖片載入錯誤處理
 const handleImageError = (e) => {
-  e.target.src = 'https://via.placeholder.com/80x80?text=No+Image'
+  e.target.src = '/img/default_img.png'
 }
 
 // 新增產品
