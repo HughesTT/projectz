@@ -48,7 +48,7 @@ projectz/
 │   └── workflows/
 │       └── deploy.yml         # GitHub Actions 工作流程
 ├── public/                    # 靜態資源
-│   └── img/                   # 圖片資源
+│   └── img/                   # 圖片檔案
 ├── src/
 │   ├── api/                   # API 請求
 │   ├── assets/                # 資源文件
@@ -75,8 +75,6 @@ projectz/
 │   ├── App.vue                # 根元件
 │   ├── main.js                # 入口文件
 │   └── style.css              # 全域樣式
-├── deploy.ps1                 # 部署腳本
-├── DEPLOYMENT.md              # 部署文件
 ├── vite.config.js             # Vite 配置
 └── package.json               # 專案配置
 ```

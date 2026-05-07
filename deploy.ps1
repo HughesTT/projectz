@@ -8,10 +8,10 @@ Write-Host "`n📌 切換到 main 分支..." -ForegroundColor Yellow
 git checkout main
 
 # 2. 添加所有更改
-Write-Host "`n📦 添加所有更改..." -ForegroundColor Yellow
+Write-Host "`n📦 增加所有變更..." -ForegroundColor Yellow
 git add -A
 
-# 3. 提交更改
+# 3. 提交變更
 $commitMessage = Read-Host "`n💬 請輸入提交訊息 (直接按 Enter 使用預設訊息)"
 if ([string]::IsNullOrWhiteSpace($commitMessage)) {
     $commitMessage = "Update: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
