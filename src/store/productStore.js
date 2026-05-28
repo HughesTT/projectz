@@ -110,7 +110,7 @@ export const useProductStore = defineStore('productStore', () => {
         return
       }
 
-      const api = `${apiBase}api/${apiPath}/admin/products?page=${page}` // 再加 /all 可取得完整產品資料
+      const api = `${apiBase}api/${apiPath}/admin/products?page=${page}` // 加 /all 可取得完整產品資料
 
       // 取得產品資料，並加入身分驗證
       const res = await fetch(api, {

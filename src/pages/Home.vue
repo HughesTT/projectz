@@ -5,6 +5,7 @@ import BestSelling from '../components/BestSelling.vue';
 import HomeCoupon from '../components/HomeCoupon.vue'
 import HomeContent from '../components/HomeContent.vue'
 import Footer from '../components/Footer.vue'
+import BackToTop from '../components/BackToTop.vue'
 import { storeToRefs } from 'pinia';
 import { useStatusStore } from '../store/statusStore'
 import LoadingOverlay from '../components/backstage/LoadingOverlay.vue';
@@ -22,7 +23,7 @@ const { isLoading } = storeToRefs(statusStore)
 // }
 
 onMounted(() => {
-  window.scrollTo(0, 0) // 確保頁面載入時從頂部開始
+  window.scrollTo(0, 0) // 確保頁面載入時從頁首開始
   // homeLoading()
 })
 </script>

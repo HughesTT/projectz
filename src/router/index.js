@@ -242,7 +242,7 @@ router.beforeEach((to, from) => {
     if (memberUser && memberToken) {
       return true // 允許訪問
     } else {
-      // 未登入，重定向到登入頁
+      // 未登入，導向到登入頁
       return { name: 'Login', query: { redirect: to.fullPath } }
     }
   }
